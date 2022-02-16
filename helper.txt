@@ -1,0 +1,13 @@
+R={x: 100, y: -1}
+L={x: 0,  y: -1}
+H={x: -1, y: 100}
+D={x: -1, y: 0}
+M={x: -1, y: 62}
+N={x: 81, y: -1}
+O={x: -1, y: 11}
+P={x: -1, y: 100-O.y}
+
+A="RMLDHRM"         -> [(R)(M)(L)(D)(H)(R)(M)]
+B="LRMLDHNM"        -> [(L)(R)(M)(L)(D)(H)(N)(M)]
+C="RLHR"            -> [(R)(L)(H)(R)]
+D="LH(PR)(OR)(DL)"  -> [(L)(H)(PR)(OR)(DL)] 

@@ -13,14 +13,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import org.scotthamilton.trollslate.ui.PhoneAngleSelector
 import org.scotthamilton.trollslate.ui.LettersSlide
+import org.scotthamilton.trollslate.ui.PhoneAngleSelector
 import org.scotthamilton.trollslate.ui.TrollTextField
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
 
@@ -34,9 +29,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {
-                    Main()
-                }
+                ) { Main() }
             }
         }
     }
@@ -48,9 +41,7 @@ class MainActivity : ComponentActivity() {
 fun Main() {
     TrollslateTheme {
         Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

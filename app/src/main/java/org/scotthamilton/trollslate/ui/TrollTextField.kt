@@ -19,9 +19,7 @@ fun TrollTextField() {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var showError by remember { mutableStateOf(false) }
     TextField(
-        modifier = Modifier
-            .width(300.dp)
-            .height(80.dp),
+        modifier = Modifier.width(300.dp).height(80.dp),
         value = text,
         onValueChange = {
             text = it
@@ -30,12 +28,8 @@ fun TrollTextField() {
         isError = showError,
         label = { Text(text = "Le texte troll", fontSize = 20.sp) },
         placeholder = { Text(text = "Votre texte", fontSize = 17.sp) },
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colorScheme.primary
-        ),
-        textStyle = TextStyle(
-            fontWeight = FontWeight.Bold,
-            fontSize = 30.sp
-        )
+        colors =
+            TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colorScheme.primary),
+        textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)
     )
 }

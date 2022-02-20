@@ -16,33 +16,34 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun LettersSlide() {
     val letters = 'A'..'Z'
-    Box (modifier =
-    Modifier
-        .height(150.dp)
-        .width(300.dp)
-        .background(
-            color = MaterialTheme.colorScheme.primaryContainer,
-            shape = RoundedCornerShape(20)
-        ),
-        contentAlignment = Alignment.Center)
-    {
-        LazyRow(modifier = Modifier
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .fillMaxSize(0.8f)
-            .padding(20.dp),
+    Box(
+        modifier =
+            Modifier.height(150.dp)
+                .width(300.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = RoundedCornerShape(20)
+                ),
+        contentAlignment = Alignment.Center
+    ) {
+        LazyRow(
+            modifier =
+                Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                    .fillMaxSize(0.8f)
+                    .padding(20.dp),
             horizontalArrangement = Arrangement.spacedBy(30.dp),
             verticalAlignment = Alignment.CenterVertically
-        )
-        {
+        ) {
             items(letters.count()) { index ->
                 Letter(
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surface)
-                        .fillParentMaxHeight()
-                        .width(50.dp),
+                    modifier =
+                        Modifier.background(MaterialTheme.colorScheme.surface)
+                            .fillParentMaxHeight()
+                            .width(50.dp),
                     letter = letters.elementAt(index),
                     backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                    textColor = MaterialTheme.colorScheme.onPrimaryContainer)
+                    textColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
         }
     }

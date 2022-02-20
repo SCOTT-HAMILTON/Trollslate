@@ -1,4 +1,4 @@
-package org.scotthamilton.trollslate
+package org.scotthamilton.trollslate.ui
 
 import android.graphics.Camera
 import android.graphics.Matrix
@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.core.graphics.withMatrix
+import org.scotthamilton.trollslate.data.FontData
 
 @RequiresApi(Build.VERSION_CODES.N)
 fun Modern3DPhonePath(phoneDims: SizeF) : Path {
@@ -104,7 +105,6 @@ fun Modern3DPhonePath(phoneDims: SizeF) : Path {
     }
 }
 
-//@RequiresApi(Build.VERSION_CODES.N)
 @RequiresApi(value = 26)
 @Composable
 fun Canvas3DPhone(

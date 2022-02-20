@@ -1,4 +1,4 @@
-package org.scotthamilton.trollslate
+package org.scotthamilton.trollslate.data
 
 open class FontLine(val pc: Int)
 class HLine(pc: Int) : FontLine(pc)

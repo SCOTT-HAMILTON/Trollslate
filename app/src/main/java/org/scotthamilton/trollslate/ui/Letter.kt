@@ -1,4 +1,4 @@
-package org.scotthamilton.trollslate
+package org.scotthamilton.trollslate.ui
 
 import android.graphics.Point
 import android.graphics.PointF
@@ -17,6 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
+import org.scotthamilton.trollslate.data.FontData
+import org.scotthamilton.trollslate.data.HLine
+import org.scotthamilton.trollslate.data.VLine
 
 enum class RangeType { INDIVIDUALS, GROUP }
 
@@ -206,7 +209,8 @@ fun Letter(
     } else {
         Box (modifier = modifier
             .fillMaxSize()
-            .background(backgroundColor)) {
+            .background(backgroundColor)
+            .padding(start = 10.dp)) {
             Codon2Letter(modifier.align(Alignment.Center)
                 .background(backgroundColor), codon, textColor, backgroundColor)
         }

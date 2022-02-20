@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.util.*
 
 @Composable
 fun TrollTextField() {
@@ -22,8 +23,8 @@ fun TrollTextField() {
         modifier = Modifier.width(300.dp).height(80.dp),
         value = text,
         onValueChange = {
-            text = it
-            showError = !text.text.all { it in 'A'..'Z' }
+            text = it.copy(text = it.text.uppercase(Locale.getDefault()))
+            showError = !text.text.all { c -> c in 'A'..'Z' }
         },
         isError = showError,
         label = { Text(text = "Le texte troll", fontSize = 20.sp) },

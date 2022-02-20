@@ -37,9 +37,9 @@ fun PhoneAngleSelector() {
                     orientation = Orientation.Vertical,
                     state =
                         rememberScrollableState { delta ->
-                            val new_offset = scrollOffset - delta
-                            if (scrollRange.first < new_offset && new_offset < scrollRange.last) {
-                                scrollOffset = new_offset
+                            val newOffset = scrollOffset - delta
+                            if (scrollRange.first < newOffset && newOffset < scrollRange.last) {
+                                scrollOffset = newOffset
                             }
                             delta
                         }

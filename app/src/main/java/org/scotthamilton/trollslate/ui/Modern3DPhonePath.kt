@@ -120,10 +120,6 @@ fun Canvas3DPhone(
                     SizeF(size.width, size.width / 2f)
                 }
             val phonePath = modern3DPhonePath(phoneDims)
-            val lines =
-                phonePath.asAndroidPath().approximate(0.5f).asIterable().chunked(3).map {
-                    PointF(it[1], it[2])
-                }
             drawIntoCanvas { canvas ->
                 val matrix = Matrix()
                 Camera()
@@ -138,7 +134,7 @@ fun Canvas3DPhone(
                     phonePath.asAndroidPath(),
                     Paint().apply {
                         color = onBackgroundColor.toArgb()
-                        strokeWidth = size.width * 0.007f
+                        strokeWidth = size.width * 0.009f
                         style = Paint.Style.STROKE
                     }
                 )

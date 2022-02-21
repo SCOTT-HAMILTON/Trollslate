@@ -3,7 +3,6 @@ package org.scotthamilton.trollslate.ui
 import android.graphics.Camera
 import android.graphics.Matrix
 import android.graphics.Paint
-import android.graphics.PointF
 import android.os.Build
 import android.util.SizeF
 import androidx.annotation.RequiresApi

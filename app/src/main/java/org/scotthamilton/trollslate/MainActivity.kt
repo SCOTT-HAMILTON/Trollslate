@@ -1,11 +1,8 @@
 package org.scotthamilton.trollslate
 
-import android.content.Context
 import android.hardware.Sensor
-import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
-import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -23,7 +20,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.scotthamilton.trollslate.ui.*
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
-import org.scotthamilton.trollslate.utils.rollTOAcceptableAngle
+import org.scotthamilton.trollslate.utils.rollToAcceptableAngle
 import org.scotthamilton.trollslate.utils.rotationVectorToRollAngle
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -41,18 +38,20 @@ class MainActivity : ComponentActivity() {
                 }
                 val phoneAngleSelectorData = defaultPhoneAngleSelectorData()
                 if (!gyroscopeMissing.value) {
-                    ReactiveSensors(applicationContext).observeSensor(Sensor.TYPE_ROTATION_VECTOR)
+                    ReactiveSensors(applicationContext)
+                        .observeSensor(Sensor.TYPE_ROTATION_VECTOR)
                         .subscribeOn(Schedulers.computation())
                         .filter { obj: ReactiveSensorEvent -> obj.sensorChanged() }
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             if (phoneAngleSelectorData.useGyroscope.value) {
                                 val roll = rotationVectorToRollAngle(it.sensorValues())
-                                val angle = rollTOAcceptableAngle(
-                                    roll,
-                                    phoneAngleSelectorData.angleRange.last.toFloat(),
-                                    phoneAngleSelectorData.angleRange.first.toFloat()
-                                )
+                                val angle =
+                                    rollToAcceptableAngle(
+                                        roll,
+                                        phoneAngleSelectorData.angleRange.last.toFloat(),
+                                        phoneAngleSelectorData.angleRange.first.toFloat()
+                                    )
                                 phoneAngleSelectorData.currentAngle.value = angle
                             }
                         }) { throwable ->
@@ -65,17 +64,19 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//
                     val snackBarHostState = remember { SnackbarHostState() }
                     Scaffold(
                         snackbarHost = {
-                            SnackbarHost(hostState = snackBarHostState, snackbar = {
-                                Snackbar(
-                                    snackbarData = it,
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            })
+                            SnackbarHost(
+                                hostState = snackBarHostState,
+                                snackbar = {
+                                    Snackbar(
+                                        snackbarData = it,
+                                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            )
                         },
                         topBar = {},
                         content = {
@@ -87,9 +88,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             } else {
                                 LaunchedEffect(snackBarHostState) {
-                                    snackBarHostState.showSnackbar(
-                                        "Le gyroscope est accessible !"
-                                    )
+                                    snackBarHostState.showSnackbar("Le gyroscope est accessible !")
                                 }
                             }
                             Main(phoneAngleSelectorData = phoneAngleSelectorData)
@@ -107,9 +106,7 @@ class MainActivity : ComponentActivity() {
 fun Main(phoneAngleSelectorData: PhoneAngleSelectorData = defaultPhoneAngleSelectorData()) {
     TrollslateTheme {
         Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

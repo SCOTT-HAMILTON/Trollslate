@@ -10,23 +10,25 @@ fun rotationVectorToRollAngle(rotationVector: FloatArray): Float {
 
     val adjustedRotationMatrix = FloatArray(9)
     SensorManager.remapCoordinateSystem(
-        rotationMatrix, worldAxisForDeviceAxisX,
-        worldAxisForDeviceAxisY, adjustedRotationMatrix
+        rotationMatrix,
+        worldAxisForDeviceAxisX,
+        worldAxisForDeviceAxisY,
+        adjustedRotationMatrix
     )
     val orientation = FloatArray(3)
     SensorManager.getOrientation(adjustedRotationMatrix, orientation)
     return orientation[2] * -57 // roll
 }
 
-fun rollTOAcceptableAngle(rollAngle: Float, maxAngle: Float, minAngle: Float) : Float {
-    val middle = (minAngle+maxAngle)/2f
+fun rollToAcceptableAngle(rollAngle: Float, maxAngle: Float, minAngle: Float): Float {
+    val middle = (minAngle + maxAngle) / 2f
     val oppositMiddle = -middle
-    val rollMax = 180f-maxAngle
-    val rollMin = 180f-minAngle
+    val rollMax = 180f - maxAngle
+    val rollMin = 180f - minAngle
     return if (rollAngle in rollMax..rollMin) {
         180f - rollAngle
     } else {
-        if (180 >= rollAngle && rollAngle >= 180f-minAngle) {
+        if (180 >= rollAngle && rollAngle >= 180f - minAngle) {
             minAngle
         } else if (rollAngle > oppositMiddle) maxAngle else minAngle
     }

@@ -82,7 +82,7 @@ fun modern3DPhonePath(phoneDims: SizeF): Path {
         )
         FontData.lettersCodonTable['A']?.let { codon ->
             val size = Size(phoneDims.height * 0.3f, phoneDims.width * 0.3f)
-            codon2LetterPath(codon, size)?.let {
+            codonLetterToPath(codon, size)?.let {
                 val rotatedPath =
                     it.asAndroidPath()
                         .apply {

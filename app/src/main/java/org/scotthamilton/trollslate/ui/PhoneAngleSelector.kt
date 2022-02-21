@@ -36,7 +36,8 @@ fun defaultPhoneAngleSelectorData(): PhoneAngleSelectorData =
 
 private fun ilerp(from: IntRange, to: IntRange, value: Int) =
     (value - from.first).toFloat() * to.count().toFloat() / from.count().toFloat() +
-        to.first.toFloat()
+            to.first.toFloat()
+
 
 @RequiresApi(value = 26)
 @OptIn(ExperimentalMaterialApi::class)

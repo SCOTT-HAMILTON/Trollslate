@@ -1,5 +1,7 @@
 package org.scotthamilton.trollslate
 
+import android.app.Activity
+import android.content.Intent
 import android.hardware.Sensor
 import android.os.Build
 import android.os.Bundle
@@ -8,16 +10,24 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.sharp.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.github.pwittchen.reactivesensors.library.ReactiveSensorEvent
 import com.github.pwittchen.reactivesensors.library.ReactiveSensors
 import com.github.pwittchen.reactivesensors.library.SensorNotFoundException
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import org.scotthamilton.trollslate.data.IntentData.Companion.PHONE_ANGLE_INTENT_EXTRA_KEY
+import org.scotthamilton.trollslate.data.IntentData.Companion.TROLL_TEXT_INTENT_EXTRA_KEY
 import org.scotthamilton.trollslate.ui.*
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
 import org.scotthamilton.trollslate.utils.rollToAcceptableAngle
@@ -37,6 +47,7 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf(!sensors.hasSensor(Sensor.TYPE_ROTATION_VECTOR))
                 }
                 val phoneAngleSelectorData = defaultPhoneAngleSelectorData()
+                val trollTextFieldData = defaultTrollTextFieldData()
                 if (!gyroscopeMissing.value) {
                     ReactiveSensors(applicationContext)
                         .observeSensor(Sensor.TYPE_ROTATION_VECTOR)
@@ -79,6 +90,7 @@ class MainActivity : ComponentActivity() {
                             )
                         },
                         topBar = {},
+                        floatingActionButtonPosition = FabPosition.Center,
                         content = {
                             if (gyroscopeMissing.value) {
                                 LaunchedEffect(snackBarHostState) {
@@ -91,7 +103,11 @@ class MainActivity : ComponentActivity() {
                                     snackBarHostState.showSnackbar("Le gyroscope est accessible !")
                                 }
                             }
-                            Main(phoneAngleSelectorData = phoneAngleSelectorData)
+                            Main(
+                                phoneAngleSelectorData = phoneAngleSelectorData,
+                                trollTextFieldData = trollTextFieldData,
+                                activity = this
+                            )
                         }
                     )
                 }
@@ -100,22 +116,89 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun TrollFab(
+    modifier: Modifier,
+    trollTextFieldData: TrollTextFieldData,
+    phoneAngleSelectorData: PhoneAngleSelectorData,
+    activity: Activity?
+) {
+    FloatingActionButton(
+        onClick = {
+            if (!trollTextFieldData.showError.value) {
+                println("Launching activity with text `${trollTextFieldData.text}`, ${phoneAngleSelectorData.currentAngle}")
+                activity?.startActivity(
+                    Intent(activity, TrollActivity::class.java).apply {
+                        putExtra(TROLL_TEXT_INTENT_EXTRA_KEY, trollTextFieldData.text.value)
+                        putExtra(PHONE_ANGLE_INTENT_EXTRA_KEY,
+                            phoneAngleSelectorData.currentAngle.value)
+                    }
+                )
+                activity?.finish()
+            }
+        },
+        modifier = modifier
+            .padding(end = 20.dp, top = 20.dp)
+            .width(60.dp)
+            .height(60.dp),
+        shape = CircleShape
+    ) {
+        Icon(
+            imageVector = Icons.Sharp.Check,
+            "",
+            modifier =
+            Modifier
+                .fillMaxSize()
+                .background(
+                    if (!trollTextFieldData.showError.value)
+                        MaterialTheme.colorScheme.primary
+                    else
+                        MaterialTheme.colorScheme.surfaceVariant
+                )
+        )
+    }
+}
+
 @RequiresApi(value = 26)
 @Preview(showBackground = true)
 @Composable
-fun Main(phoneAngleSelectorData: PhoneAngleSelectorData = defaultPhoneAngleSelectorData()) {
+private fun Main(
+    phoneAngleSelectorData: PhoneAngleSelectorData = defaultPhoneAngleSelectorData(),
+    trollTextFieldData: TrollTextFieldData = defaultTrollTextFieldData(),
+    activity: Activity? = null
+) {
     TrollslateTheme {
         Surface(
-            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceAround
+                modifier = Modifier.fillMaxHeight()
             ) {
-                LettersSlide()
-                TrollTextField()
-                PhoneAngleSelector(phoneAngleSelectorData)
+                TrollFab(
+                    modifier = Modifier.align(Alignment.End),
+                    trollTextFieldData = trollTextFieldData,
+                    phoneAngleSelectorData = phoneAngleSelectorData,
+                    activity
+                )
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp))
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 20.dp)
+                ) {
+                    LettersSlide()
+                    TrollTextField(trollTextFieldData)
+                    PhoneAngleSelector(phoneAngleSelectorData)
+                }
             }
+
         }
     }
 }

@@ -46,7 +46,6 @@ fun codon2LetterPath(codon: String, canvas_size: Size): Path? {
     val indivRanges =
         groupRanges
             .foldRight(groupRange(0, 0) to mutableListOf<TypedRange>()) { t, r ->
-                println("t=$t, r=$r")
                 val prev = r.first
                 if (prev.range != 0..0) {
                     val newstart = t.range.last + 1
@@ -77,7 +76,6 @@ fun codon2LetterPath(codon: String, canvas_size: Size): Path? {
         }
     val path = Path()
     var curPosPc = firstPos
-    println("lol codon=$codon, firstPos=$firstPos")
     path.moveTo(pcToPoint(curPosPc, canvas_size))
     sortedRanges.forEach {
         curPosPc =

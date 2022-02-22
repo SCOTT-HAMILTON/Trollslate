@@ -12,6 +12,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,19 +20,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import org.scotthamilton.trollslate.R
 
 data class PhoneAngleSelectorData(
     val angleRange: IntRange,
     val currentAngle: MutableState<Float>,
-    val useGyroscope: MutableState<Boolean>
+    val useGyroscope: MutableState<Boolean>,
+    val gyroscopeMissing: MutableState<Boolean>,
+    val snackBarHostState: SnackbarHostState
 )
 
-fun defaultPhoneAngleSelectorData(): PhoneAngleSelectorData =
+fun defaultPhoneAngleSelectorData(
+    gyroscopeMissing: MutableState<Boolean> = mutableStateOf(false),
+    snackBarHostState: SnackbarHostState = SnackbarHostState()
+): PhoneAngleSelectorData =
     PhoneAngleSelectorData(
         angleRange = IntRange(10, 80),
         currentAngle = mutableStateOf(80f),
-        useGyroscope = mutableStateOf(false)
+        useGyroscope = mutableStateOf(false),
+        gyroscopeMissing = gyroscopeMissing,
+        snackBarHostState = snackBarHostState
     )
 
 private fun ilerp(from: IntRange, to: IntRange, value: Int) =
@@ -46,41 +55,50 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
     var currentScrollOffset = ilerp(data.angleRange, scrollRange, data.currentAngle.value.toInt())
     Box(
         modifier =
-            Modifier.height(200.dp)
-                .width(300.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(20)
-                )
-                .scrollable(
-                    orientation = Orientation.Vertical,
-                    state =
-                        rememberScrollableState { delta ->
-                            val newOffset = currentScrollOffset - delta
-                            if (scrollRange.first < newOffset && newOffset < scrollRange.last) {
-                                currentScrollOffset = newOffset
-                                data.currentAngle.value =
-                                    ilerp(scrollRange, data.angleRange, currentScrollOffset.toInt())
-                            }
-                            delta
-                        }
-                ),
+        Modifier
+            .height(200.dp)
+            .width(300.dp)
+            .background(
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                shape = RoundedCornerShape(20)
+            )
+            .scrollable(
+                orientation = Orientation.Vertical,
+                state =
+                rememberScrollableState { delta ->
+                    val newOffset = currentScrollOffset - delta
+                    if (scrollRange.first < newOffset && newOffset < scrollRange.last) {
+                        currentScrollOffset = newOffset
+                        data.currentAngle.value =
+                            ilerp(scrollRange, data.angleRange, currentScrollOffset.toInt())
+                    }
+                    delta
+                }
+            ),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .height(20.dp))
             Text(
                 text = "${"%.2f".format(data.currentAngle.value)}°",
-                modifier = Modifier.align(Alignment.Start).padding(start = 30.dp),
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(start = 30.dp),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.fillMaxWidth().height(40.dp))
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp))
             Canvas3DPhone(
-                modifier = Modifier.size(120.dp, 60.dp).padding(start = 10.dp),
+                modifier = Modifier
+                    .size(120.dp, 60.dp)
+                    .padding(start = 10.dp),
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                 angle = data.currentAngle.value
             )
@@ -88,19 +106,36 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
 
         val fabDisabledColor = MaterialTheme.colorScheme.surface
         val fabEnabledColor = MaterialTheme.colorScheme.primary
+        val scope = rememberCoroutineScope()
         FloatingActionButton(
             modifier =
-                Modifier.size(60.dp).align(Alignment.TopEnd).padding(end = 20.dp, top = 20.dp),
-            onClick = { data.useGyroscope.value = !data.useGyroscope.value }
+            Modifier
+                .size(60.dp)
+                .align(Alignment.TopEnd)
+                .padding(end = 20.dp, top = 20.dp),
+            onClick = {
+                if (!data.gyroscopeMissing.value) {
+                    data.useGyroscope.value = !data.useGyroscope.value
+                } else {
+                    scope.launch {
+                        data.snackBarHostState.showSnackbar(
+                            "Impossible d'accéder au gyroscope, la fonctionnalité ne sera pas disponible"
+                        )
+                    }
+                }
+            }
         ) {
             Icon(
                 painterResource(id = R.mipmap.gyroscope_foreground),
                 "",
                 modifier =
-                    Modifier.fillMaxSize()
-                        .background(
-                            if (data.useGyroscope.value) fabEnabledColor else fabDisabledColor
-                        )
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        if (!data.gyroscopeMissing.value &&
+                            data.useGyroscope.value
+                        ) fabEnabledColor else fabDisabledColor
+                    )
             )
         }
     }

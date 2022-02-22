@@ -41,10 +41,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TrollslateTheme {
+                val snackBarHostState = remember { SnackbarHostState() }
                 val gyroscopeMissing = remember {
                     mutableStateOf(!sensors.hasSensor(Sensor.TYPE_ROTATION_VECTOR))
                 }
-                val phoneAngleSelectorData = defaultPhoneAngleSelectorData()
+                val phoneAngleSelectorData = defaultPhoneAngleSelectorData(
+                    gyroscopeMissing,
+                    snackBarHostState
+                )
                 val trollTextFieldData = defaultTrollTextFieldData()
                 if (!gyroscopeMissing.value) {
                     ReactiveSensors(applicationContext)
@@ -73,7 +77,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val snackBarHostState = remember { SnackbarHostState() }
                     Scaffold(
                         snackbarHost = {
                             SnackbarHost(
@@ -90,17 +93,6 @@ class MainActivity : ComponentActivity() {
                         topBar = {},
                         floatingActionButtonPosition = FabPosition.Center,
                         content = {
-                            if (gyroscopeMissing.value) {
-                                LaunchedEffect(snackBarHostState) {
-                                    snackBarHostState.showSnackbar(
-                                        "Impossible d'accéder au gyroscope, la fonctionnalité ne sera pas disponible"
-                                    )
-                                }
-                            } else {
-                                LaunchedEffect(snackBarHostState) {
-                                    snackBarHostState.showSnackbar("Le gyroscope est accessible !")
-                                }
-                            }
                             Main(
                                 phoneAngleSelectorData = phoneAngleSelectorData,
                                 trollTextFieldData = trollTextFieldData,

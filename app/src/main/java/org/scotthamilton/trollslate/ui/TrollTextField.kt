@@ -8,12 +8,12 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.util.*
 import org.scotthamilton.trollslate.data.FontData
 
 data class TrollTextFieldData(var text: MutableState<String>, val showError: MutableState<Boolean>)
@@ -28,10 +28,14 @@ fun TrollTextField(data: TrollTextFieldData) {
         modifier = Modifier.width(300.dp).height(80.dp),
         value = text,
         onValueChange = {
-            text = it.copy(text = it.text.uppercase(Locale.getDefault()))
+            text = it
+            data.text.value = text.text.uppercase()
             data.showError.value =
-                !text.text.all { c -> c in FontData.lettersCodonTable.keys } || text.text.isEmpty()
-            data.text.value = text.text
+                !data.text.value.all { c -> c in FontData.lettersCodonTable.keys } ||
+                    data.text.value.isEmpty()
+        },
+        visualTransformation = { text ->
+            TransformedText(AnnotatedString(text.text.uppercase()), OffsetMapping.Identity)
         },
         isError = data.showError.value,
         label = { Text(text = "Le texte troll", fontSize = 20.sp) },

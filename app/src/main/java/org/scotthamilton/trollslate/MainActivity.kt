@@ -3,6 +3,7 @@ package org.scotthamilton.trollslate
 import android.app.Activity
 import android.content.Intent
 import android.hardware.Sensor
+import android.hardware.SensorManager.SENSOR_DELAY_UI
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -45,14 +46,12 @@ class MainActivity : ComponentActivity() {
                 val gyroscopeMissing = remember {
                     mutableStateOf(!sensors.hasSensor(Sensor.TYPE_ROTATION_VECTOR))
                 }
-                val phoneAngleSelectorData = defaultPhoneAngleSelectorData(
-                    gyroscopeMissing,
-                    snackBarHostState
-                )
+                val phoneAngleSelectorData =
+                    defaultPhoneAngleSelectorData(gyroscopeMissing, snackBarHostState)
                 val trollTextFieldData = defaultTrollTextFieldData()
                 if (!gyroscopeMissing.value) {
                     ReactiveSensors(applicationContext)
-                        .observeSensor(Sensor.TYPE_ROTATION_VECTOR)
+                        .observeSensor(Sensor.TYPE_ROTATION_VECTOR, SENSOR_DELAY_UI)
                         .subscribeOn(Schedulers.computation())
                         .filter { obj: ReactiveSensorEvent -> obj.sensorChanged() }
                         .observeOn(AndroidSchedulers.mainThread())

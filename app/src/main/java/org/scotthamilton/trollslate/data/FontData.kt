@@ -31,10 +31,12 @@ class FontData {
             )
         val lettersCodonTable =
             mapOf(
+                ' ' to "",
                 'A' to "RMLDHRM",
                 'B' to "LRMLDHNM",
                 'C' to "RLHR",
-                'D' to "LH(PR)(OR)(DL)",
+//                'D' to "LH(PR)(OR)(DL)",
+                'D' to "LHAPROADL",
                 'E' to "RLMRLHR",
                 'F' to "LMRLHR",
                 'G' to "LNSQRNDLHNM",

@@ -42,7 +42,9 @@ fun LettersSlide() {
                             .width(50.dp),
                     letter = letters.elementAt(index),
                     backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                    textColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    textColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    padding = 10f,
+                    adaptiveStrokes = false
                 )
             }
         }

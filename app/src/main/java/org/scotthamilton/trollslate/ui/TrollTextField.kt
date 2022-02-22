@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.scotthamilton.trollslate.data.FontData
 import java.util.*
 
 data class TrollTextFieldData(
@@ -34,7 +35,7 @@ fun TrollTextField(data: TrollTextFieldData) {
         onValueChange = {
             text = it.copy(text = it.text.uppercase(Locale.getDefault()))
             data.showError.value =
-                !text.text.all { c -> c in 'A'..'Z' } || text.text.isEmpty()
+                !text.text.all { c -> c in FontData.lettersCodonTable.keys } || text.text.isEmpty()
             data.text.value = text.text
         },
         isError = data.showError.value,

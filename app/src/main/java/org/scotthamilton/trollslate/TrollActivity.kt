@@ -45,20 +45,15 @@ class TrollActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 private fun Main(
-    text: String = "HELLO",
-    angle: Float = 45f
+    text: String = "DORIAN",
+    angle: Float = 10f
 ) {
-    val normalRatio = 1f/15f;
+    val normalRatio = 1f/4f;
     val projectedRatio = normalRatio*sin(angle*PI/180f)
     TrollslateTheme {
         Surface(
             modifier = Modifier.fillMaxSize().background(Color.White)
         ) {
-//            Column {
-//                Text("Hello World, this is the Troll page lol")
-//                Text("Text = `$text`")
-//                Text("Angle = `$angle`")
-//            }
             LazyRow(
                 modifier =
                 Modifier.background(Color.White)
@@ -68,17 +63,25 @@ private fun Main(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 items(text.length) { index ->
+                    val (letterWidth, letterHeight) =
+                        (LocalConfiguration.current.screenHeightDp*projectedRatio).let {
+                        if (it > 50f) {
+                            50f to 50f/projectedRatio.toFloat()
+                        } else {
+                            it.toFloat() to LocalConfiguration.current.screenHeightDp.toFloat()
+                        }
+                    }
                     Letter(
-                        modifier =
-                        Modifier.background(Color.White)
-                            .fillParentMaxHeight()
-                            .width(
-                                (LocalConfiguration.current.screenHeightDp*projectedRatio).dp
-                            ),
+                        modifier = Modifier
+                            .background(Color.White)
+                            .width(letterWidth.dp)
+                            .height(letterHeight.dp),
                         letter = text.elementAt(index),
                         backgroundColor = Color.White,
                         textColor = Color.Black,
-                        strokeWidth = 15f
+                        strokeWidth = letterWidth*0.2f,
+                        padding = letterWidth*0.2f,
+                        angle = angle
                     )
                 }
             }

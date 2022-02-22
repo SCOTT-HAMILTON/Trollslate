@@ -13,19 +13,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.scotthamilton.trollslate.data.FontData
 import java.util.*
+import org.scotthamilton.trollslate.data.FontData
 
-data class TrollTextFieldData(
-    var text: MutableState<String>,
-    val showError: MutableState<Boolean>
-)
+data class TrollTextFieldData(var text: MutableState<String>, val showError: MutableState<Boolean>)
 
 fun defaultTrollTextFieldData(): TrollTextFieldData =
-    TrollTextFieldData(
-        text = mutableStateOf(""),
-        showError = mutableStateOf(true)
-    )
+    TrollTextFieldData(text = mutableStateOf(""), showError = mutableStateOf(true))
+
 @Composable
 fun TrollTextField(data: TrollTextFieldData) {
     var text by remember { mutableStateOf(TextFieldValue("")) }

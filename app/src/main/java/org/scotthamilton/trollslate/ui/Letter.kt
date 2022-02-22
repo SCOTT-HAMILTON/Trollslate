@@ -16,15 +16,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.DrawStyle
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.minus
 import androidx.core.graphics.plus
+import kotlin.math.*
 import org.scotthamilton.trollslate.data.FontData
 import org.scotthamilton.trollslate.data.HLine
 import org.scotthamilton.trollslate.data.VLine
-import kotlin.math.*
 
 enum class RangeType {
     INDIVIDUALS,
@@ -40,20 +39,18 @@ private fun indivRange(start: Int, end: Int) =
 
 private fun groupRange(start: Int, end: Int) = TypedRange(IntRange(start, end), RangeType.GROUP)
 
-private fun parseCodon(
-    codon: String
-) : Pair<List<TypedRange>, Point> {
+private fun parseCodon(codon: String): Pair<List<TypedRange>, Point> {
     if (codon.isEmpty()) {
         return listOf<TypedRange>() to Point()
     }
     val groupRanges =
         listOf(groupRange(-1, -1)) +
-                """\(\w*\)"""
-                    .toRegex()
-                    .findAll(codon)
-                    .map { groupRange(it.range.first, it.range.last) }
-                    .toList() +
-                listOf(groupRange(codon.length, codon.length))
+            """\(\w*\)"""
+                .toRegex()
+                .findAll(codon)
+                .map { groupRange(it.range.first, it.range.last) }
+                .toList() +
+            listOf(groupRange(codon.length, codon.length))
     val indivRanges =
         groupRanges
             .foldRight(groupRange(0, 0) to mutableListOf<TypedRange>()) { t, r ->
@@ -77,8 +74,7 @@ private fun parseCodon(
                 println("[error] invalid start pos `$code`")
                 TODO()
             } else {
-                listOf(indivRange(first.range.first + 1, first.range.last)) + it.drop(1) to
-                        startPos
+                listOf(indivRange(first.range.first + 1, first.range.last)) + it.drop(1) to startPos
             }
         } else {
             it.drop(1) to groupCode2Point(code, Point(0, 0))
@@ -94,7 +90,8 @@ fun drawCodonLetter(
     strokeWidth: Float,
     angle: Float,
     adaptiveStrokes: Boolean,
-    drawScope: DrawScope) {
+    drawScope: DrawScope
+) {
     val (sortedRanges, firstPos) = parseCodon(codon)
     var curPosPc = firstPos
     sortedRanges.forEach {
@@ -108,7 +105,8 @@ fun drawCodonLetter(
                     strokeWidth,
                     angle,
                     adaptiveStrokes,
-                    drawScope)
+                    drawScope
+                )
             } else {
                 drawGroupCode(
                     codon.substring(it.range),
@@ -118,14 +116,13 @@ fun drawCodonLetter(
                     strokeWidth,
                     angle,
                     adaptiveStrokes,
-                    drawScope)
+                    drawScope
+                )
             }
     }
 }
 
-fun codonLetterToPath(
-    codon: String,
-    canvas_size: Size) : Path {
+fun codonLetterToPath(codon: String, canvas_size: Size): Path {
     val (sortedRanges, firstPos) = parseCodon(codon)
     var curPosPc = firstPos
     val path = Path()
@@ -202,7 +199,16 @@ fun drawIndivCode(
     var curPosPc = start_cur_pos_pc
     code.forEach {
         indivCode2Point(it, curPosPc)?.let { new_pos ->
-            drawPcLine(curPosPc, new_pos, canvas_size, color, strokeWidth, angle, adaptiveStrokes, drawScope)
+            drawPcLine(
+                curPosPc,
+                new_pos,
+                canvas_size,
+                color,
+                strokeWidth,
+                angle,
+                adaptiveStrokes,
+                drawScope
+            )
             curPosPc = new_pos
         }
     }
@@ -236,8 +242,17 @@ fun drawGroupCode(
     drawScope: DrawScope
 ): Point {
     val newPos = groupCode2Point(code, start_cur_pos_pc)
-    if (! (code.length >= 2 && code[1] == '_')) {
-        drawPcLine(start_cur_pos_pc, newPos, canvas_size, color, strokeWidth, angle, adaptiveStrokes, drawScope)
+    if (!(code.length >= 2 && code[1] == '_')) {
+        drawPcLine(
+            start_cur_pos_pc,
+            newPos,
+            canvas_size,
+            color,
+            strokeWidth,
+            angle,
+            adaptiveStrokes,
+            drawScope
+        )
     }
     return newPos
 }
@@ -260,13 +275,11 @@ fun applyGroupCodeToPath(
 }
 
 data class FloatRange(val first: Float, val last: Float) {
-    fun count(): Float =
-        abs(last - first)
+    fun count(): Float = abs(last - first)
 }
 
-private fun flerp(from: FloatRange, to: FloatRange, value: Float) : Float =
-    (value - from.first) * to.count() / from.count() +
-            to.first
+private fun flerp(from: FloatRange, to: FloatRange, value: Float): Float =
+    (value - from.first) * to.count() / from.count() + to.first
 
 private fun drawPcLine(
     start_cur_pos_pc: Point,
@@ -280,31 +293,28 @@ private fun drawPcLine(
 ) {
     val start = pcToPoint(start_cur_pos_pc, canvas_size)
     val end = pcToPoint(newPos, canvas_size)
-    if (adaptiveStrokes && abs(start.x-end.x) > 0.10f) {
-        val (s, e) = if (start.x > end.x)
-            end to start
-        else start to end
-        val angleSin = sin(angle*PI/180f).toFloat()
+    if (adaptiveStrokes && abs(start.x - end.x) > 0.10f) {
+        val (s, e) = if (start.x > end.x) end to start else start to end
+        val angleSin = sin(angle * PI / 180f).toFloat()
         val midY = (newPos.y + start_cur_pos_pc.y) / 2f
 
         val (normAB, length) = (e - s).let { (it / it.length()) to it.length() }
         val factor = flerp(FloatRange(0f, 100f), FloatRange(0.2f, 0.4f), midY)
-        val a = s + normAB*length*factor*0.5f
-        val b = e - normAB*length*factor*0.5f
-        val newLength = (b-a).length()
+        val a = s + normAB * length * factor * 0.5f
+        val b = e - normAB * length * factor * 0.5f
+        val newLength = (b - a).length()
 
-        var stroke = flerp(
-            FloatRange(0f, 100f), FloatRange(1f/angleSin, 2.5f/angleSin),
-            midY
-        ) * strokeWidth
+        var stroke =
+            flerp(FloatRange(0f, 100f), FloatRange(1f / angleSin, 2.5f / angleSin), midY) *
+                strokeWidth
 
         if (abs(start.y - end.y) < 0.10f) {
-            val y = min(canvas_size.height-stroke+strokeWidth/2f, s.y-strokeWidth/2f)
+            val y = min(canvas_size.height - stroke + strokeWidth / 2f, s.y - strokeWidth / 2f)
             drawScope.drawRect(
                 color = color,
                 style = Fill,
-                topLeft = Offset(s.x-strokeWidth/2f, y),
-                size = Size(length+strokeWidth, stroke)
+                topLeft = Offset(s.x - strokeWidth / 2f, y),
+                size = Size(length + strokeWidth, stroke)
             )
         } else {
             if (newLength < stroke) {
@@ -329,11 +339,9 @@ private fun drawPcLine(
     }
 }
 
-private operator fun PointF.times(k: Float): PointF =
-    PointF(x*k, y*k)
+private operator fun PointF.times(k: Float): PointF = PointF(x * k, y * k)
 
-private operator fun PointF.div(length: Float) =
-    PointF(x/length, y/length)
+private operator fun PointF.div(length: Float) = PointF(x / length, y / length)
 
 fun pcToPoint(pcPoint: Point, canvas_size: Size) =
     PointF(
@@ -343,21 +351,27 @@ fun pcToPoint(pcPoint: Point, canvas_size: Size) =
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun Letter(modifier: Modifier,
-           letter: Char = 'A',
-           backgroundColor: Color,
-           textColor: Color,
-           padding: Float,
-           strokeWidth: Float = 5f,
-           angle: Float = 80f,
-           adaptiveStrokes: Boolean = true
+fun Letter(
+    modifier: Modifier,
+    letter: Char = 'A',
+    backgroundColor: Color,
+    textColor: Color,
+    padding: Float,
+    strokeWidth: Float = 5f,
+    angle: Float = 80f,
+    adaptiveStrokes: Boolean = true
 ) {
     val codon = FontData.lettersCodonTable[letter]
     if (codon == null) {
         println("[error] unsupported character `$letter`, can't display it out.")
     } else {
-        Box(modifier = modifier.fillMaxSize().background(backgroundColor)
-            .padding(start = padding.dp, end = padding.dp)) {
+        Box(
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .background(backgroundColor)
+                    .padding(start = padding.dp, end = padding.dp)
+        ) {
             Codon2Letter(
                 modifier.align(Alignment.Center).background(backgroundColor),
                 codon,

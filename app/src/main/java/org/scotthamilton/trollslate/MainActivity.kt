@@ -17,8 +17,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.pwittchen.reactivesensors.library.ReactiveSensorEvent
@@ -126,35 +124,33 @@ fun TrollFab(
     FloatingActionButton(
         onClick = {
             if (!trollTextFieldData.showError.value) {
-                println("Launching activity with text `${trollTextFieldData.text}`, ${phoneAngleSelectorData.currentAngle}")
+                println(
+                    "Launching activity with text `${trollTextFieldData.text}`, ${phoneAngleSelectorData.currentAngle}"
+                )
                 activity?.startActivity(
                     Intent(activity, TrollActivity::class.java).apply {
                         putExtra(TROLL_TEXT_INTENT_EXTRA_KEY, trollTextFieldData.text.value)
-                        putExtra(PHONE_ANGLE_INTENT_EXTRA_KEY,
-                            phoneAngleSelectorData.currentAngle.value)
+                        putExtra(
+                            PHONE_ANGLE_INTENT_EXTRA_KEY,
+                            phoneAngleSelectorData.currentAngle.value
+                        )
                     }
                 )
                 activity?.finish()
             }
         },
-        modifier = modifier
-            .padding(end = 20.dp, top = 20.dp)
-            .width(60.dp)
-            .height(60.dp),
+        modifier = modifier.padding(end = 20.dp, top = 20.dp).width(60.dp).height(60.dp),
         shape = CircleShape
     ) {
         Icon(
             imageVector = Icons.Sharp.Check,
             "",
             modifier =
-            Modifier
-                .fillMaxSize()
-                .background(
-                    if (!trollTextFieldData.showError.value)
-                        MaterialTheme.colorScheme.primary
-                    else
-                        MaterialTheme.colorScheme.surfaceVariant
-                )
+                Modifier.fillMaxSize()
+                    .background(
+                        if (!trollTextFieldData.showError.value) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.surfaceVariant
+                    )
         )
     }
 }
@@ -169,9 +165,7 @@ private fun Main(
 ) {
     TrollslateTheme {
         Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -183,22 +177,17 @@ private fun Main(
                     phoneAngleSelectorData = phoneAngleSelectorData,
                     activity
                 )
-                Spacer(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(20.dp))
+                Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 20.dp)
+                    modifier = Modifier.fillMaxSize().padding(bottom = 20.dp)
                 ) {
                     LettersSlide()
                     TrollTextField(trollTextFieldData)
                     PhoneAngleSelector(phoneAngleSelectorData)
                 }
             }
-
         }
     }
 }

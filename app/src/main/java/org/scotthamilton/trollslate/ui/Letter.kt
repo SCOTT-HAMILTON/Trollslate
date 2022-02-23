@@ -39,7 +39,7 @@ private fun indivRange(start: Int, end: Int) =
 
 private fun groupRange(start: Int, end: Int) = TypedRange(IntRange(start, end), RangeType.GROUP)
 
-private fun parseCodon(codon: String): Pair<List<TypedRange>, Point> {
+private fun parseCodon(codon: String): Pair<List<TypedRange>, Point>? {
     if (codon.isEmpty()) {
         return listOf<TypedRange>() to Point()
     }
@@ -72,7 +72,7 @@ private fun parseCodon(codon: String): Pair<List<TypedRange>, Point> {
             val startPos = indivCode2Point(code.first(), Point(0, 0))
             if (startPos == null) {
                 println("[error] invalid start pos `$code`")
-                TODO()
+                null
             } else {
                 listOf(indivRange(first.range.first + 1, first.range.last)) + it.drop(1) to startPos
             }
@@ -92,50 +92,60 @@ fun drawCodonLetter(
     adaptiveStrokes: Boolean,
     drawScope: DrawScope
 ) {
-    val (sortedRanges, firstPos) = parseCodon(codon)
-    var curPosPc = firstPos
-    sortedRanges.forEach {
-        curPosPc =
-            if (it.type == RangeType.INDIVIDUALS) {
-                drawIndivCode(
-                    codon.substring(it.range),
-                    curPosPc,
-                    canvas_size,
-                    color,
-                    strokeWidth,
-                    angle,
-                    adaptiveStrokes,
-                    drawScope
-                )
-            } else {
-                drawGroupCode(
-                    codon.substring(it.range),
-                    curPosPc,
-                    canvas_size,
-                    color,
-                    strokeWidth,
-                    angle,
-                    adaptiveStrokes,
-                    drawScope
-                )
-            }
+    val parsedCodon = parseCodon(codon)
+    if (parsedCodon == null) {
+        return
+    } else {
+        val (sortedRanges, firstPos) = parsedCodon
+        var curPosPc = firstPos
+        sortedRanges.forEach {
+            curPosPc =
+                if (it.type == RangeType.INDIVIDUALS) {
+                    drawIndivCode(
+                        codon.substring(it.range),
+                        curPosPc,
+                        canvas_size,
+                        color,
+                        strokeWidth,
+                        angle,
+                        adaptiveStrokes,
+                        drawScope
+                    )
+                } else {
+                    drawGroupCode(
+                        codon.substring(it.range),
+                        curPosPc,
+                        canvas_size,
+                        color,
+                        strokeWidth,
+                        angle,
+                        adaptiveStrokes,
+                        drawScope
+                    )
+                }
+        }
     }
 }
 
 fun codonLetterToPath(codon: String, canvas_size: Size): Path {
-    val (sortedRanges, firstPos) = parseCodon(codon)
-    var curPosPc = firstPos
-    val path = Path()
-    path.moveTo(pcToPoint(curPosPc, canvas_size))
-    sortedRanges.forEach {
-        curPosPc =
-            if (it.type == RangeType.INDIVIDUALS) {
-                applyIndivCodeToPath(codon.substring(it.range), path, curPosPc, canvas_size)
-            } else {
-                applyGroupCodeToPath(codon.substring(it.range), path, curPosPc, canvas_size)
-            }
+    val parsedCodon = parseCodon(codon)
+    return if (parsedCodon == null) {
+        Path()
+    } else {
+        val (sortedRanges, firstPos) = parsedCodon
+        var curPosPc = firstPos
+        val path = Path()
+        path.moveTo(pcToPoint(curPosPc, canvas_size))
+        sortedRanges.forEach {
+            curPosPc =
+                if (it.type == RangeType.INDIVIDUALS) {
+                    applyIndivCodeToPath(codon.substring(it.range), path, curPosPc, canvas_size)
+                } else {
+                    applyGroupCodeToPath(codon.substring(it.range), path, curPosPc, canvas_size)
+                }
+        }
+        path
     }
-    return path
 }
 
 @RequiresApi(Build.VERSION_CODES.N)

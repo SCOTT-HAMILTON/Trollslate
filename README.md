@@ -29,7 +29,7 @@ TODO
 Trollslate is delivered as it is under the well known MIT License.
 
 **Credits**
- - [gyroscope icon from Freepik @ FlatIcon] : <https://www.flaticon.com/free-icons/rotate>
+ - [gyroscope icon from Freepik at FlatIcon] : <https://www.flaticon.com/free-icons/rotate>
 
 **References that helped**
  - [sample rotation sensor app by kplatfoot] : <https://github.com/kplatfoot/android-rotation-sensor-sample>

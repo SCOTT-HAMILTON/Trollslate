@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.scotthamilton.trollslate.R
-import org.scotthamilton.trollslate.TrollActivity
 
 data class PhoneAngleSelectorData(
     val angleRange: IntRange,

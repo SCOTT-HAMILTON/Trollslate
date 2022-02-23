@@ -149,23 +149,19 @@ fun TrollFab(
                     )
                 }
             },
-            modifier = modifier
-                .padding(end = 20.dp, top = 20.dp)
-                .width(60.dp)
-                .height(60.dp),
+            modifier = modifier.padding(end = 20.dp, top = 20.dp).width(60.dp).height(60.dp),
             shape = CircleShape
         ) {
             Icon(
                 imageVector = Icons.Sharp.Check,
                 "",
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        if (!trollTextFieldData.showError.value)
-                            MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.surfaceVariant
-                    )
+                    Modifier.fillMaxSize()
+                        .background(
+                            if (!trollTextFieldData.showError.value)
+                                MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.surfaceVariant
+                        )
             )
         }
     }
@@ -182,17 +178,17 @@ fun CreditsButton(state: MutableTransitionState<Boolean>, activity: Activity?) {
                 activity?.getString(R.string.credits_text)?.let {
                     launchTrollActivityAndExit(
                         activity,
-                        it
-                            .trimIndent()
-                            .replace(Regex("""\n*"""), " "),
+                        it.trimIndent().replace(Regex("""\n*"""), " "),
                         10f
                     )
                 }
             },
             Modifier.padding(top = 10.dp, end = 10.dp),
         ) {
-            Text(text = stringResource(id = R.string.credits),
-                style = MaterialTheme.typography.labelLarge)
+            Text(
+                text = stringResource(id = R.string.credits),
+                style = MaterialTheme.typography.labelLarge
+            )
         }
     }
 }
@@ -207,9 +203,7 @@ private fun Main(
 ) {
     TrollslateTheme {
         Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -230,15 +224,11 @@ private fun Main(
                     )
                     CreditsButton(creditState, activity)
                 }
-                Spacer(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(20.dp))
+                Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 20.dp)
+                    modifier = Modifier.fillMaxSize().padding(bottom = 20.dp)
                 ) {
                     LettersSlide()
                     TrollTextField(trollTextFieldData) {

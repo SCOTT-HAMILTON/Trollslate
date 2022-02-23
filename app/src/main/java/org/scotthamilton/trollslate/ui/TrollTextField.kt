@@ -31,9 +31,7 @@ fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineS
     val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf(TextFieldValue("")) }
     TextField(
-        modifier = Modifier
-            .width(300.dp)
-            .height(80.dp),
+        modifier = Modifier.width(300.dp).height(80.dp),
         value = text,
         onValueChange = {
             text = it
@@ -50,11 +48,18 @@ fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineS
             )
         },
         isError = data.showError.value,
-        label = { Text(text = stringResource(id = org.scotthamilton.trollslate.R.string.troll_text),
-            fontSize = 20.sp) },
-        placeholder = { Text(text =
-        stringResource(id = org.scotthamilton.trollslate.R.string.your_text)
-            , fontSize = 17.sp) },
+        label = {
+            Text(
+                text = stringResource(id = org.scotthamilton.trollslate.R.string.troll_text),
+                fontSize = 20.sp
+            )
+        },
+        placeholder = {
+            Text(
+                text = stringResource(id = org.scotthamilton.trollslate.R.string.your_text),
+                fontSize = 17.sp
+            )
+        },
         colors =
             TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colorScheme.primary),
         textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)

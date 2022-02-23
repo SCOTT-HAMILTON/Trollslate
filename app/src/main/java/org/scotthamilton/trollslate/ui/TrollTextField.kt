@@ -26,13 +26,11 @@ fun defaultTrollTextFieldData(): TrollTextFieldData =
     TrollTextFieldData(text = mutableStateOf(""), showError = mutableStateOf(true))
 
 @Composable
-fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineScope)->Unit) {
+fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineScope) -> Unit) {
     val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf(TextFieldValue("")) }
     TextField(
-        modifier = Modifier
-            .width(300.dp)
-            .height(80.dp),
+        modifier = Modifier.width(300.dp).height(80.dp),
         value = text,
         onValueChange = {
             text = it
@@ -40,14 +38,13 @@ fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineS
             data.showError.value =
                 !data.text.value.all { c -> c in FontData.lettersCodonTable.keys } ||
                     data.text.value.isEmpty()
-            scope.launch {
-                withContext(Dispatchers.IO) {
-                    onValueChanged(this)
-                }
-            }
+            scope.launch { withContext(Dispatchers.IO) { onValueChanged(this) } }
         },
-        visualTransformation = { text ->
-            TransformedText(AnnotatedString(text.text.uppercase()), OffsetMapping.Identity)
+        visualTransformation = { annotatedString ->
+            TransformedText(
+                AnnotatedString(annotatedString.text.uppercase()),
+                OffsetMapping.Identity
+            )
         },
         isError = data.showError.value,
         label = { Text(text = "Le texte troll", fontSize = 20.sp) },

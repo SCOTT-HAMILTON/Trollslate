@@ -7,7 +7,7 @@
 Transform the text you provide into barcode looking text.
 Have fun asking your friends to figure out what's written.
 Don't write too much slurs, it's not making it any funnier.
-Use gyroscopic feature to select roll angle if available.
+Use the gyroscopic feature to select the roll angle if available.
 Dark theme is enforced but the barcode-text-page is in light theme for contrast purposes.
 Please consider increasing the screen's brightness if you don't see anything.
 Some screens work better than others but it should work fine on yours regardless.
@@ -26,12 +26,14 @@ This project is configured with Android Studio, it builds with gradle
  - French 100%
  - English 100%
  - German 100%
+
 The app is very little, it shouldn't take you more than 10 minutes
 to add translations to your native language. There are two ways to do so.
+Once you're done with your translations, fork the project and open a Pull Request.
 
 ### With Android Studio (easiest)
  - Open the string res file (`app/src/main/res/values/strings.xml`)
- - Click on open "Open editor"
+ - Click on open `Open editor`
  - Click on the Earth Icon (`Add Locale` button)
  - Select a language
  - Fill in the translations
@@ -44,14 +46,15 @@ to add translations to your native language. There are two ways to do so.
 
 ### By Hand (harder)
  - Check the code qualifier of the language you are willing to translate to
- (cf [the android doc](https://developer.android.com/guide/topics/resources/providing-resources#AlternativeResources)
+ (cf [android doc](https://developer.android.com/guide/topics/resources/providing-resources#AlternativeResources)
  Table 2., Language and region)
- - Create the folder `app/src/main/res/values-XX` where XX is the code qualifier
+ - Create folder `app/src/main/res/values-XX` where XX is the code qualifier
  you looked for, for example: `values-de`, `values-fr-rFR`.
  - Copy the file `app/src/main/res/values/strings.xml` to the just created directory.
- - Edit this file and replace all the english text with its translation.
+ - Edit this file and replace all the english text between xml string-tags with its translation.
  Be careful because some characters need to be escaped
  (the backslash should normally do the work `\`)
+
 
 ## License
 Trollslate is delivered as it is under the well known MIT License.

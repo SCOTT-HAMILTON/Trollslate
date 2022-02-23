@@ -8,6 +8,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,7 +31,9 @@ fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineS
     val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf(TextFieldValue("")) }
     TextField(
-        modifier = Modifier.width(300.dp).height(80.dp),
+        modifier = Modifier
+            .width(300.dp)
+            .height(80.dp),
         value = text,
         onValueChange = {
             text = it
@@ -47,8 +50,11 @@ fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineS
             )
         },
         isError = data.showError.value,
-        label = { Text(text = "Le texte troll", fontSize = 20.sp) },
-        placeholder = { Text(text = "Votre texte", fontSize = 17.sp) },
+        label = { Text(text = stringResource(id = org.scotthamilton.trollslate.R.string.troll_text),
+            fontSize = 20.sp) },
+        placeholder = { Text(text =
+        stringResource(id = org.scotthamilton.trollslate.R.string.your_text)
+            , fontSize = 17.sp) },
         colors =
             TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colorScheme.primary),
         textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)

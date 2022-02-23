@@ -22,6 +22,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.pwittchen.reactivesensors.library.ReactiveSensorEvent
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf(!sensors.hasSensor(Sensor.TYPE_ROTATION_VECTOR))
                 }
                 val phoneAngleSelectorData =
-                    defaultPhoneAngleSelectorData(gyroscopeMissing, snackBarHostState)
+                    defaultPhoneAngleSelectorData(this, gyroscopeMissing, snackBarHostState)
                 val trollTextFieldData = defaultTrollTextFieldData()
                 if (!gyroscopeMissing.value) {
                     ReactiveSensors(applicationContext)
@@ -148,19 +149,23 @@ fun TrollFab(
                     )
                 }
             },
-            modifier = modifier.padding(end = 20.dp, top = 20.dp).width(60.dp).height(60.dp),
+            modifier = modifier
+                .padding(end = 20.dp, top = 20.dp)
+                .width(60.dp)
+                .height(60.dp),
             shape = CircleShape
         ) {
             Icon(
                 imageVector = Icons.Sharp.Check,
                 "",
                 modifier =
-                    Modifier.fillMaxSize()
-                        .background(
-                            if (!trollTextFieldData.showError.value)
-                                MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.surfaceVariant
-                        )
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        if (!trollTextFieldData.showError.value)
+                            MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.surfaceVariant
+                    )
             )
         }
     }
@@ -174,20 +179,21 @@ fun CreditsButton(state: MutableTransitionState<Boolean>, activity: Activity?) {
     ) {
         OutlinedButton(
             onClick = {
-                launchTrollActivityAndExit(
-                    activity,
-                    """
-                        THIS APP WAS DEVELOPPED BY SCOTT HAMILTON WITH THE HELP OF MARC DESSEVRE
-                        SPECIAL THANKS GOES TO PWITTCHEN FOR HIS REACTIVESENSORS LIBRARY AND TO
-                        FREEPIK FOR THEIR GYROSCOPE ICON THIS APP IS POWERED BY JETPACK COMPOSE
-                    """
-                        .trimIndent()
-                        .replace('\n', ' '),
-                    10f
-                )
+                activity?.getString(R.string.credits_text)?.let {
+                    launchTrollActivityAndExit(
+                        activity,
+                        it
+                            .trimIndent()
+                            .replace(Regex("""\n*"""), " "),
+                        10f
+                    )
+                }
             },
             Modifier.padding(top = 10.dp, end = 10.dp),
-        ) { Text(text = "crédits", style = MaterialTheme.typography.labelLarge) }
+        ) {
+            Text(text = stringResource(id = R.string.credits),
+                style = MaterialTheme.typography.labelLarge)
+        }
     }
 }
 
@@ -201,7 +207,9 @@ private fun Main(
 ) {
     TrollslateTheme {
         Surface(
-            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -222,11 +230,15 @@ private fun Main(
                     )
                     CreditsButton(creditState, activity)
                 }
-                Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp))
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxSize().padding(bottom = 20.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 20.dp)
                 ) {
                     LettersSlide()
                     TrollTextField(trollTextFieldData) {

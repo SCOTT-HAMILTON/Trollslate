@@ -23,7 +23,35 @@ TODO
 This project is configured with Android Studio, it builds with gradle
 
 ## Translations
-TODO
+ - French 100%
+ - English 100%
+ - German 100%
+The app is very little, it shouldn't take you more than 10 minutes
+to add translations to your native language. There are two ways to do so.
+
+### With Android Studio (easiest)
+ - Open the string res file (`app/src/main/res/values/strings.xml`)
+ - Click on open "Open editor"
+ - Click on the Earth Icon (`Add Locale` button)
+ - Select a language
+ - Fill in the translations
+ - Some texts may be too long to be written in the translations editor. 
+ You may prefer to directly write your translations in the string res
+ xml file located in `app/src/main/res/values/strings-XX.xml` where XX
+ is the lowercase code of the language you're currently translating to,
+ but be careful because some characters need to be escaped
+ (the backslash should normally do the work `\`).
+
+### By Hand (harder)
+ - Check the code qualifier of the language you are willing to translate to
+ (cf [the android doc](https://developer.android.com/guide/topics/resources/providing-resources#AlternativeResources)
+ Table 2., Language and region)
+ - Create the folder `app/src/main/res/values-XX` where XX is the code qualifier
+ you looked for, for example: `values-de`, `values-fr-rFR`.
+ - Copy the file `app/src/main/res/values/strings.xml` to the just created directory.
+ - Edit this file and replace all the english text with its translation.
+ Be careful because some characters need to be escaped
+ (the backslash should normally do the work `\`)
 
 ## License
 Trollslate is delivered as it is under the well known MIT License.

@@ -1,5 +1,7 @@
 package org.scotthamilton.trollslate.ui
 
+import android.app.Activity
+import android.provider.Settings.Global.getString
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -22,16 +24,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.scotthamilton.trollslate.R
+import org.scotthamilton.trollslate.TrollActivity
 
 data class PhoneAngleSelectorData(
     val angleRange: IntRange,
     val currentAngle: MutableState<Float>,
     val useGyroscope: MutableState<Boolean>,
     val gyroscopeMissing: MutableState<Boolean>,
-    val snackBarHostState: SnackbarHostState
+    val snackBarHostState: SnackbarHostState,
+    val activity: Activity?
 )
 
 fun defaultPhoneAngleSelectorData(
+    activity: Activity? = null,
     gyroscopeMissing: MutableState<Boolean> = mutableStateOf(false),
     snackBarHostState: SnackbarHostState = SnackbarHostState()
 ): PhoneAngleSelectorData =
@@ -40,7 +45,8 @@ fun defaultPhoneAngleSelectorData(
         currentAngle = mutableStateOf(80f),
         useGyroscope = mutableStateOf(false),
         gyroscopeMissing = gyroscopeMissing,
-        snackBarHostState = snackBarHostState
+        snackBarHostState = snackBarHostState,
+        activity = activity
     )
 
 private fun ilerp(from: IntRange, to: IntRange, value: Int) =
@@ -106,9 +112,9 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
                     data.useGyroscope.value = !data.useGyroscope.value
                 } else {
                     scope.launch {
-                        data.snackBarHostState.showSnackbar(
-                            "Impossible d'accéder au gyroscope, la fonctionnalité ne sera pas disponible"
-                        )
+                        data.activity?.getString(R.string.no_gyro_error)?.let {
+                            data.snackBarHostState.showSnackbar(it)
+                        }
                     }
                 }
             }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Trollslate</string>
+    <string name="credits_text">
+        CETTE APP A ETE DEVELOPPEE PAR SCOTT HAMILTON AVEC L AIDE DE MARC DESSEVRE
+        UN GRAND MERCI A PWITTCHEN POUR SA BIBLIOTHEQUE REACTIVESENSORS ET A FREEPIK
+        POUR LEUR ICONE DE GYROSCOPE CETT APP EST DEVELOPPEE AVEC JETPACK COMPOSE
+    </string>
+    <string name="credits">crédits</string>
+    <string name="troll_text">Le texte troll</string>
+    <string name="your_text">Votre texte</string>
+    <string name="no_gyro_error">
+        Impossible d\'accéder au gyroscope, la fonctionnalité ne sera pas disponible
+    </string>
+</resources>

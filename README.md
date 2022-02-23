@@ -13,7 +13,7 @@ Please consider increasing the screen's brightness if you don't see anything.
 Some screens work better than others but it should work fine on yours regardless.
 
 ## Screens
-TODO
+![Demo](https://user-images.githubusercontent.com/24496705/155399458-58716f80-02a0-431c-9125-8aca085e0d35.gif)
 
 ## Dependencies
  - Jetpack Compose

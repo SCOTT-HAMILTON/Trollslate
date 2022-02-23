@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.scotthamilton.trollslate">
+    package="org.scotthamilton.trollslate"
+    android:versionCode="22022022"
+    android:versionName="Monet"
+>
+    <!--    format of the verisonCode is DDMMYY-->
 
     <application
         android:allowBackup="true"

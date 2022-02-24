@@ -1,26 +1,21 @@
 package org.scotthamilton.trollslate
 
-import androidx.compose.ui.test.MainTestClock
+import android.graphics.Bitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollToIndex
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.supervisorScope
 import org.junit.Assert.assertEquals
-import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
+import tools.fastlane.screengrab.FileWritingScreenshotCallback
 import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.locale.LocaleTestRule
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.coroutineContext
 
 
 /**
@@ -53,8 +48,7 @@ class ExampleInstrumentedTest {
             }
         }
         composeTestRule.onNodeWithTag("gyroFab").performClick()
-        composeTestRule.waitForIdle()
-        Screengrab.screenshot("start")
+        composeTestRule.takeScreenShot("start")
     }
 
     @Test
@@ -65,10 +59,25 @@ class ExampleInstrumentedTest {
                 TrollActivityContent("HELLO WORLD "*5, 10f)
             }
         }
-        composeTestRule.onNodeWithTag("trollActivityLazyRow").performScrollToIndex(5)
-        composeTestRule.waitForIdle()
-        Screengrab.screenshot("troll")
+        composeTestRule.onNodeWithTag("trollActivityLazyRow").performScrollToIndex(12)
+        composeTestRule.takeScreenShot("troll")
     }
+}
+
+// Thanks to https://dev.to/pchmielowski/automate-taking-screenshots-of-android-app-with-jetpack-compose-2950
+private fun ComposeContentTestRule.takeScreenShot(screenName: String) {
+    waitForIdle()
+    onRoot()
+        .captureToImage()
+        .asAndroidBitmap()
+        .saveScreengrab(screenName)
+}
+
+private fun Bitmap.saveScreengrab(file: String) {
+    FileWritingScreenshotCallback(
+        InstrumentationRegistry.getInstrumentation().targetContext.applicationContext,
+        Screengrab.getLocale()
+    ).screenshotCaptured(file, this)
 }
 
 private operator fun String.times(i: Int): String =

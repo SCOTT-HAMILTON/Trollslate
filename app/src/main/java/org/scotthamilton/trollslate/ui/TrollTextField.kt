@@ -8,6 +8,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -31,7 +32,7 @@ fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineS
     val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf(TextFieldValue("")) }
     TextField(
-        modifier = Modifier.width(300.dp).height(80.dp),
+        modifier = Modifier.width(300.dp).height(80.dp).testTag("trollTextInput"),
         value = text,
         onValueChange = {
             text = it

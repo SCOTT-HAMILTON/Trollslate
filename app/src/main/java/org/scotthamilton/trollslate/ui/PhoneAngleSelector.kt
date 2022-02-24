@@ -18,6 +18,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -105,7 +106,8 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
         val scope = rememberCoroutineScope()
         FloatingActionButton(
             modifier =
-                Modifier.size(60.dp).align(Alignment.TopEnd).padding(end = 20.dp, top = 20.dp),
+                Modifier.size(60.dp).align(Alignment.TopEnd)
+                    .padding(end = 20.dp, top = 20.dp).testTag("gyroFab"),
             onClick = {
                 if (!data.gyroscopeMissing.value) {
                     data.useGyroscope.value = !data.useGyroscope.value

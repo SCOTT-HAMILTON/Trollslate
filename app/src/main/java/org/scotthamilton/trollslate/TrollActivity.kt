@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlin.math.PI
@@ -29,7 +30,7 @@ class TrollActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TrollslateTheme {
-                Main(
+                TrollActivityContent(
                     intent.extras?.get(TROLL_TEXT_INTENT_EXTRA_KEY) as String,
                     intent.extras?.get(PHONE_ANGLE_INTENT_EXTRA_KEY) as Float
                 )
@@ -41,13 +42,14 @@ class TrollActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.N)
 @Preview(showBackground = true)
 @Composable
-private fun Main(text: String = "DORIAN", angle: Float = 10f) {
+fun TrollActivityContent(text: String = "DORIAN", angle: Float = 10f) {
     val normalRatio = 1f / 4f
     val projectedRatio = normalRatio * sin(angle * PI / 180f)
     TrollslateTheme {
         Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
             LazyRow(
-                modifier = Modifier.background(Color.White).fillMaxSize().padding(20.dp),
+                modifier = Modifier.background(Color.White).fillMaxSize()
+                    .padding(20.dp).testTag("trollActivityLazyRow"),
                 horizontalArrangement = Arrangement.spacedBy(1.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {

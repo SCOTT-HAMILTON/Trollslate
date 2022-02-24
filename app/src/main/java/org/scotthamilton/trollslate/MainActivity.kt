@@ -22,6 +22,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,71 +45,77 @@ import org.scotthamilton.trollslate.utils.rotationVectorToRollAngle
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val sensors = ReactiveSensors(applicationContext)
-
         setContent {
             TrollslateTheme {
-                val snackBarHostState = remember { SnackbarHostState() }
-                val gyroscopeMissing = remember {
-                    mutableStateOf(!sensors.hasSensor(Sensor.TYPE_ROTATION_VECTOR))
-                }
-                val phoneAngleSelectorData =
-                    defaultPhoneAngleSelectorData(this, gyroscopeMissing, snackBarHostState)
-                val trollTextFieldData = defaultTrollTextFieldData()
-                if (!gyroscopeMissing.value) {
-                    ReactiveSensors(applicationContext)
-                        .observeSensor(Sensor.TYPE_ROTATION_VECTOR, SENSOR_DELAY_UI)
-                        .subscribeOn(Schedulers.computation())
-                        .filter { obj: ReactiveSensorEvent -> obj.sensorChanged() }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            if (phoneAngleSelectorData.useGyroscope.value) {
-                                val roll = rotationVectorToRollAngle(it.sensorValues())
-                                val angle =
-                                    rollToAcceptableAngle(
-                                        roll,
-                                        phoneAngleSelectorData.angleRange.last.toFloat(),
-                                        phoneAngleSelectorData.angleRange.first.toFloat()
-                                    )
-                                phoneAngleSelectorData.currentAngle.value = angle
-                            }
-                        }) { throwable ->
-                            if (throwable is SensorNotFoundException) {
-                                gyroscopeMissing.value = true
-                            }
-                        }
-                }
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Scaffold(
-                        snackbarHost = {
-                            SnackbarHost(
-                                hostState = snackBarHostState,
-                                snackbar = {
-                                    Snackbar(
-                                        snackbarData = it,
-                                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                            )
-                        },
-                        topBar = {},
-                        floatingActionButtonPosition = FabPosition.Center,
-                        content = {
-                            Main(
-                                phoneAngleSelectorData = phoneAngleSelectorData,
-                                trollTextFieldData = trollTextFieldData,
-                                activity = this
-                            )
-                        }
-                    )
-                }
+                MainActivityContent(this)
             }
         }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainActivityContent(activity: Activity?) {
+    val sensors =
+        activity?.let { ReactiveSensors(it) }
+    val snackBarHostState = remember { SnackbarHostState() }
+    val gyroscopeMissing = remember {
+        mutableStateOf(!(sensors?.hasSensor(Sensor.TYPE_ROTATION_VECTOR) ?: false))
+    }
+    val phoneAngleSelectorData =
+        defaultPhoneAngleSelectorData(activity, gyroscopeMissing, snackBarHostState)
+    val trollTextFieldData = defaultTrollTextFieldData()
+    if (!gyroscopeMissing.value) {
+        sensors
+            ?.observeSensor(Sensor.TYPE_ROTATION_VECTOR, SENSOR_DELAY_UI)
+            ?.subscribeOn(Schedulers.computation())
+            ?.filter { obj: ReactiveSensorEvent -> obj.sensorChanged() }
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe({
+                if (phoneAngleSelectorData.useGyroscope.value) {
+                    val roll = rotationVectorToRollAngle(it.sensorValues())
+                    val angle =
+                        rollToAcceptableAngle(
+                            roll,
+                            phoneAngleSelectorData.angleRange.last.toFloat(),
+                            phoneAngleSelectorData.angleRange.first.toFloat()
+                        )
+                    phoneAngleSelectorData.currentAngle.value = angle
+                }
+            }) { throwable ->
+                if (throwable is SensorNotFoundException) {
+                    gyroscopeMissing.value = true
+                }
+            }
+    }
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackBarHostState,
+                    snackbar = {
+                        Snackbar(
+                            snackbarData = it,
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                )
+            },
+            topBar = {},
+            floatingActionButtonPosition = FabPosition.Center,
+            content = {
+                Main(
+                    phoneAngleSelectorData = phoneAngleSelectorData,
+                    trollTextFieldData = trollTextFieldData,
+                    activity = activity
+                )
+            }
+        )
     }
 }
 
@@ -183,7 +190,7 @@ fun CreditsButton(state: MutableTransitionState<Boolean>, activity: Activity?) {
                     )
                 }
             },
-            Modifier.padding(top = 10.dp, end = 10.dp),
+            Modifier.padding(top = 10.dp, end = 10.dp).testTag("creditsButton"),
         ) {
             Text(
                 text = stringResource(id = R.string.credits),

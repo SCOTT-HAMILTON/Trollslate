@@ -4,7 +4,7 @@
 <h1 align="center">Trollslate - Android App to troll your friends with barcode looking messages</h1>
 
 ## Description
-Transform the text you provide into barcode looking text.
+Transform your text into barcode looking text.
 Have fun asking your friends to figure out what's written.
 Don't write too much slurs, it's not making it any funnier.
 Use the gyroscopic feature to select the roll angle if available.

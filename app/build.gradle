@@ -10,8 +10,8 @@ android {
         applicationId "org.scotthamilton.trollslate"
         minSdk 21
         targetSdk 31
-        versionCode 22022022
-        versionName "Monet"
+        versionCode 24022022
+        versionName "Degas"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

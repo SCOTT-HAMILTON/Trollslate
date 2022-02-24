@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.scotthamilton.trollslate"
-    android:versionCode="22022022"
-    android:versionName="Monet"
+    android:versionCode="24022022"
+    android:versionName="Degas"
 >
     <!--    format of the verisonCode is DDMMYY-->
 

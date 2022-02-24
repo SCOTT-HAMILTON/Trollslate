@@ -17,7 +17,6 @@ import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.locale.LocaleTestRule
 
-
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -25,11 +24,9 @@ import tools.fastlane.screengrab.locale.LocaleTestRule
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
-    @get:Rule
-    val composeTestRule = createComposeRule()
+    @get:Rule val composeTestRule = createComposeRule()
 
-    @get:Rule
-    val localeTestRule = LocaleTestRule()
+    @get:Rule val localeTestRule = LocaleTestRule()
 
     @Test
     fun useAppContext() {
@@ -42,11 +39,7 @@ class ExampleInstrumentedTest {
     fun mainActivityScreenshots() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
 
-        composeTestRule.setContent {
-            TrollslateTheme {
-                MainActivityContent(null)
-            }
-        }
+        composeTestRule.setContent { TrollslateTheme { MainActivityContent(null) } }
         composeTestRule.onNodeWithTag("gyroFab").performClick()
         composeTestRule.takeScreenShot("start")
     }
@@ -55,30 +48,26 @@ class ExampleInstrumentedTest {
     fun trollActivityScreenshots() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
         composeTestRule.setContent {
-            TrollslateTheme {
-                TrollActivityContent("HELLO WORLD "*5, 10f)
-            }
+            TrollslateTheme { TrollActivityContent("HELLO WORLD " * 5, 10f) }
         }
         composeTestRule.onNodeWithTag("trollActivityLazyRow").performScrollToIndex(12)
         composeTestRule.takeScreenShot("troll")
     }
 }
 
-// Thanks to https://dev.to/pchmielowski/automate-taking-screenshots-of-android-app-with-jetpack-compose-2950
+// Thanks to
+// https://dev.to/pchmielowski/automate-taking-screenshots-of-android-app-with-jetpack-compose-2950
 private fun ComposeContentTestRule.takeScreenShot(screenName: String) {
     waitForIdle()
-    onRoot()
-        .captureToImage()
-        .asAndroidBitmap()
-        .saveScreengrab(screenName)
+    onRoot().captureToImage().asAndroidBitmap().saveScreengrab(screenName)
 }
 
 private fun Bitmap.saveScreengrab(file: String) {
     FileWritingScreenshotCallback(
-        InstrumentationRegistry.getInstrumentation().targetContext.applicationContext,
-        Screengrab.getLocale()
-    ).screenshotCaptured(file, this)
+            InstrumentationRegistry.getInstrumentation().targetContext.applicationContext,
+            Screengrab.getLocale()
+        )
+        .screenshotCaptured(file, this)
 }
 
-private operator fun String.times(i: Int): String =
-    List(i) { this }.joinToString("")
+private operator fun String.times(i: Int): String = List(i) { this }.joinToString("")

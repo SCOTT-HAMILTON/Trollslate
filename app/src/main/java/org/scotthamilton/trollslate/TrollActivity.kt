@@ -48,8 +48,11 @@ fun TrollActivityContent(text: String = "DORIAN", angle: Float = 10f) {
     TrollslateTheme {
         Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
             LazyRow(
-                modifier = Modifier.background(Color.White).fillMaxSize()
-                    .padding(20.dp).testTag("trollActivityLazyRow"),
+                modifier =
+                    Modifier.background(Color.White)
+                        .fillMaxSize()
+                        .padding(20.dp)
+                        .testTag("trollActivityLazyRow"),
                 horizontalArrangement = Arrangement.spacedBy(1.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {

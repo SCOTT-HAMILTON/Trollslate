@@ -106,8 +106,10 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
         val scope = rememberCoroutineScope()
         FloatingActionButton(
             modifier =
-                Modifier.size(60.dp).align(Alignment.TopEnd)
-                    .padding(end = 20.dp, top = 20.dp).testTag("gyroFab"),
+                Modifier.size(60.dp)
+                    .align(Alignment.TopEnd)
+                    .padding(end = 20.dp, top = 20.dp)
+                    .testTag("gyroFab"),
             onClick = {
                 if (!data.gyroscopeMissing.value) {
                     data.useGyroscope.value = !data.useGyroscope.value

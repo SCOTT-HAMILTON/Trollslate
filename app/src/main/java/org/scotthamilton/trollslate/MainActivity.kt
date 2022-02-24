@@ -45,11 +45,7 @@ import org.scotthamilton.trollslate.utils.rotationVectorToRollAngle
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            TrollslateTheme {
-                MainActivityContent(this)
-            }
-        }
+        setContent { TrollslateTheme { MainActivityContent(this) } }
     }
 }
 
@@ -57,8 +53,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainActivityContent(activity: Activity?) {
-    val sensors =
-        activity?.let { ReactiveSensors(it) }
+    val sensors = activity?.let { ReactiveSensors(it) }
     val snackBarHostState = remember { SnackbarHostState() }
     val gyroscopeMissing = remember {
         mutableStateOf(!(sensors?.hasSensor(Sensor.TYPE_ROTATION_VECTOR) ?: false))
@@ -89,10 +84,7 @@ fun MainActivityContent(activity: Activity?) {
                 }
             }
     }
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Scaffold(
             snackbarHost = {
                 SnackbarHost(

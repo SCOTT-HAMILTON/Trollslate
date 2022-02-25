@@ -29,17 +29,12 @@ class MainActivity : ComponentActivity() {
                         route = "troll?text={text}&angle={angle}",
                         arguments =
                             listOf(
-                                navArgument("text") {
-                                    defaultValue = "INVALID".toUrlBase64()
-                                },
+                                navArgument("text") { defaultValue = "INVALID".toUrlBase64() },
                                 navArgument("angle") { defaultValue = 45f }
                             )
                     ) {
                         val text = it.arguments?.getString("text")?.decodeUrlBase64()
-                        TrollContent(
-                            text ?: "INVALID",
-                            it.arguments?.getFloat("angle") ?: 45f
-                        )
+                        TrollContent(text ?: "INVALID", it.arguments?.getFloat("angle") ?: 45f)
                     }
                 }
             }

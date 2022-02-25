@@ -75,7 +75,7 @@ fun MainActivityContent(activity: Activity?) {
                                     phoneAngleSelectorData.angleRange.first.toFloat()
                                 )
                             phoneAngleSelectorData.currentAngle.value = angle
-                        }
+                               }
                     }
                 }
                 override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}

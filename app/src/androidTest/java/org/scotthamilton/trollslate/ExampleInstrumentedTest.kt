@@ -44,6 +44,7 @@ class ExampleInstrumentedTest {
         composeTestRule.takeScreenShot("start")
     }
 
+    @OptIn(ExperimentalTestApi::class)
     @Test
     fun trollActivityScreenshots() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())

@@ -1,8 +1,12 @@
 package org.scotthamilton.trollslate
 
 import android.app.Activity
+import android.content.Context.SENSOR_SERVICE
 import android.content.Intent
 import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.hardware.SensorManager.SENSOR_DELAY_UI
 import android.os.Build
 import android.os.Bundle
@@ -26,11 +30,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.pwittchen.reactivesensors.library.ReactiveSensorEvent
-import com.github.pwittchen.reactivesensors.library.ReactiveSensors
-import com.github.pwittchen.reactivesensors.library.SensorNotFoundException
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.scotthamilton.trollslate.data.IntentData.Companion.PHONE_ANGLE_INTENT_EXTRA_KEY
@@ -53,36 +52,37 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainActivityContent(activity: Activity?) {
-    val sensors = activity?.let { ReactiveSensors(it) }
+    val sensorManager = activity?.getSystemService(SENSOR_SERVICE) as SensorManager?
+    val rotationSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
     val snackBarHostState = remember { SnackbarHostState() }
     val gyroscopeMissing = remember {
-        mutableStateOf(!(sensors?.hasSensor(Sensor.TYPE_ROTATION_VECTOR) ?: false))
+        mutableStateOf(rotationSensor == null)
     }
     val phoneAngleSelectorData =
         defaultPhoneAngleSelectorData(activity, gyroscopeMissing, snackBarHostState)
     val trollTextFieldData = defaultTrollTextFieldData()
     if (!gyroscopeMissing.value) {
-        sensors
-            ?.observeSensor(Sensor.TYPE_ROTATION_VECTOR, SENSOR_DELAY_UI)
-            ?.subscribeOn(Schedulers.computation())
-            ?.filter { obj: ReactiveSensorEvent -> obj.sensorChanged() }
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe({
-                if (phoneAngleSelectorData.useGyroscope.value) {
-                    val roll = rotationVectorToRollAngle(it.sensorValues())
-                    val angle =
-                        rollToAcceptableAngle(
-                            roll,
-                            phoneAngleSelectorData.angleRange.last.toFloat(),
-                            phoneAngleSelectorData.angleRange.first.toFloat()
-                        )
-                    phoneAngleSelectorData.currentAngle.value = angle
+        sensorManager?.registerListener(
+            object : SensorEventListener {
+                override fun onSensorChanged(event: SensorEvent?) {
+                    event?.values?.let {
+                        if (phoneAngleSelectorData.useGyroscope.value) {
+                            val roll = rotationVectorToRollAngle(it)
+                            val angle =
+                                rollToAcceptableAngle(
+                                    roll,
+                                    phoneAngleSelectorData.angleRange.last.toFloat(),
+                                    phoneAngleSelectorData.angleRange.first.toFloat()
+                                )
+                            phoneAngleSelectorData.currentAngle.value = angle
+                        }
+                    }
                 }
-            }) { throwable ->
-                if (throwable is SensorNotFoundException) {
-                    gyroscopeMissing.value = true
-                }
-            }
+                override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
+            },
+            rotationSensor,
+            SENSOR_DELAY_UI
+        )
     }
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Scaffold(

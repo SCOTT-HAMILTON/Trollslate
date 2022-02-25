@@ -17,7 +17,6 @@ Some screens work better than others but it should work fine on yours regardless
 
 ## Dependencies
  - Jetpack Compose
- - [ReactiveSensors](https://github.com/pwittchen/ReactiveSensors) from pwittchen
 
 ## Building
 This project is configured with Android Studio, it builds with gradle
@@ -64,11 +63,11 @@ Trollslate is delivered as it is under the well known MIT License.
 
 **References that helped**
  - [sample rotation sensor app by kplatfoot] : <https://github.com/kplatfoot/android-rotation-sensor-sample>
- - [ReactiveSensors' documentation] : <https://github.com/pwittchen/ReactiveSensors#usage>
  - [android documentation] : <https://developer.android.com/>
+ - [pchmielowski's blog post on automated compose-espresso screenshots] : <https://dev.to/pchmielowski/automate-taking-screenshots-of-android-app-with-jetpack-compose-2950>
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
    [sample rotation sensor app by kplatfoot]: <https://github.com/kplatfoot/android-rotation-sensor-sample>
-   [ReactiveSensors' documentation]: <https://github.com/pwittchen/ReactiveSensors#usage>
+   [pchmielowski's blog post on automated compose-espresso screenshots]: <https://dev.to/pchmielowski/automate-taking-screenshots-of-android-app-with-jetpack-compose-2950>
    [android documentation]: <https://developer.android.com/>

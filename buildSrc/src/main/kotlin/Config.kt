@@ -3,5 +3,5 @@ object Config {
     const val compileSdkVersion = 31
     const val targetSdkVersion = 31
     const val version = 24022022
-    const val versionName = "Dega"
+    const val versionName = "Degas"
 }

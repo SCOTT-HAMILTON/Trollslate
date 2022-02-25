@@ -29,24 +29,18 @@ class CommonConfigurationPlugin : Plugin<Project> {
                 }
 
                 target.tasks.withType(KotlinCompile::class.java).configureEach {
-                    kotlinOptions {
-                        jvmTarget = "1.8"
-                    }
+                    kotlinOptions { jvmTarget = "1.8" }
                 }
 
                 buildFeatures.compose = true
 
-                composeOptions {
-                    kotlinCompilerExtensionVersion = Libs.Compose.version
-                }
+                composeOptions { kotlinCompilerExtensionVersion = Libs.Compose.version }
 
-                target.dependencies {
-                    add("coreLibraryDesugaring", Libs.desugar)
+                target.dependencies { add("coreLibraryDesugaring", Libs.desugar) }
+                packagingOptions {
+                    resources.excludes += "META-INF/AL2.0"
+                    resources.excludes += "META-INF/LGPL2.1"
                 }
-                 packagingOptions {
-                     resources.excludes += "META-INF/AL2.0"
-                     resources.excludes += "META-INF/LGPL2.1"
-                 }
             }
         }
     }

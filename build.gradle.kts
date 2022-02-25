@@ -9,9 +9,7 @@ buildscript {
     }
 }
 
-plugins {
-
-}
+plugins {}
 
 allprojects {
     repositories {

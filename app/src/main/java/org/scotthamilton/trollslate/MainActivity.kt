@@ -55,9 +55,7 @@ fun MainActivityContent(activity: Activity?) {
     val sensorManager = activity?.getSystemService(SENSOR_SERVICE) as SensorManager?
     val rotationSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
     val snackBarHostState = remember { SnackbarHostState() }
-    val gyroscopeMissing = remember {
-        mutableStateOf(rotationSensor == null)
-    }
+    val gyroscopeMissing = remember { mutableStateOf(rotationSensor == null) }
     val phoneAngleSelectorData =
         defaultPhoneAngleSelectorData(activity, gyroscopeMissing, snackBarHostState)
     val trollTextFieldData = defaultTrollTextFieldData()
@@ -75,7 +73,7 @@ fun MainActivityContent(activity: Activity?) {
                                     phoneAngleSelectorData.angleRange.first.toFloat()
                                 )
                             phoneAngleSelectorData.currentAngle.value = angle
-                               }
+                        }
                     }
                 }
                 override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}

@@ -28,8 +28,7 @@ object Libs {
         const val animation = "androidx.compose.animation:animation:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val foundationLayout = "androidx.compose.foundation:foundation-layout:$version"
-        const val materialIcons =
-            "androidx.compose.material:material-icons-extended:$version"
+        const val materialIcons = "androidx.compose.material:material-icons-extended:$version"
         const val material3 = "androidx.compose.material3:material3:1.0.0-alpha06"
         const val material = "androidx.compose.material:material:$version"
         const val runtime = "androidx.compose.runtime:runtime:$version"
@@ -42,44 +41,35 @@ object Libs {
         const val uiTestJUnit = "androidx.compose.ui:ui-test-junit4:$version"
         const val uiTestManifest = "androidx.compose.ui:ui-test-manifest:$version"
 
-        val main = listOf(
-            animation,
-            foundation,
-            foundationLayout,
-            materialIcons,
-            material3,
-            material,
-            runtime,
-            uiTooling,
-            ui,
-            uiUtil,
-            activity
-        )
+        val main =
+            listOf(
+                animation,
+                foundation,
+                foundationLayout,
+                materialIcons,
+                material3,
+                material,
+                runtime,
+                uiTooling,
+                ui,
+                uiUtil,
+                activity
+            )
 
-        val androidTest = listOf(
-            uiTest,
-            uiTestJUnit
-        )
+        val androidTest = listOf(uiTest, uiTestJUnit)
 
         val debugTest = listOf(uiTooling, uiTestManifest)
     }
 }
 
 fun DependencyHandler.implementations(dependencies: List<String>) {
-    dependencies.forEach {
-        add("implementation", it)
-    }
+    dependencies.forEach { add("implementation", it) }
 }
 
 fun DependencyHandler.androidTestImplementations(dependencies: List<String>) {
-    dependencies.forEach {
-        add("androidTestImplementation", it)
-    }
+    dependencies.forEach { add("androidTestImplementation", it) }
 }
 
 fun DependencyHandler.debugImplementations(dependencies: List<String>) {
-    dependencies.forEach {
-        add("debugImplementation", it)
-    }
+    dependencies.forEach { add("debugImplementation", it) }
 }
-

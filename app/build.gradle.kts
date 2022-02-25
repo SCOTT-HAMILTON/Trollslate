@@ -12,20 +12,14 @@ android {
     //         keyPassword = "test1234"
     //     }
     // }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    kotlinOptions { jvmTarget = "1.8" }
     defaultConfig {
         applicationId = "org.scotthamilton.trollslate"
         // signingConfig = signingConfigs.getByName("config")
-//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Libs.Compose.version
-    }
+    buildFeatures { compose = true }
+    composeOptions { kotlinCompilerExtensionVersion = Libs.Compose.version }
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -35,16 +29,11 @@ android {
 }
 
 dependencies {
-    implementations(
-        Libs.AndroidX.main
-    )
-    implementations(
-        Libs.Compose.main
-    )
+    implementations(Libs.AndroidX.main)
+    implementations(Libs.Compose.main)
     add("testImplementation", Libs.junit)
     androidTestImplementations(
-        Libs.AndroidX.androidTest + Libs.Compose.androidTest +
-                listOf(Libs.screengrab)
+        Libs.AndroidX.androidTest + Libs.Compose.androidTest + listOf(Libs.screengrab)
     )
     debugImplementations(Libs.Compose.debugTest)
 }

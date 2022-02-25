@@ -1,9 +1,6 @@
-package org.scotthamilton.trollslate
+package org.scotthamilton.trollslate.ui
 
 import android.os.Build
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,30 +16,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlin.math.PI
 import kotlin.math.sin
-import org.scotthamilton.trollslate.data.IntentData.Companion.PHONE_ANGLE_INTENT_EXTRA_KEY
-import org.scotthamilton.trollslate.data.IntentData.Companion.TROLL_TEXT_INTENT_EXTRA_KEY
-import org.scotthamilton.trollslate.ui.Letter
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
-
-class TrollActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.N)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            TrollslateTheme {
-                TrollActivityContent(
-                    intent.extras?.get(TROLL_TEXT_INTENT_EXTRA_KEY) as String,
-                    intent.extras?.get(PHONE_ANGLE_INTENT_EXTRA_KEY) as Float
-                )
-            }
-        }
-    }
-}
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Preview(showBackground = true)
 @Composable
-fun TrollActivityContent(text: String = "DORIAN", angle: Float = 10f) {
+fun TrollContent(text: String = "DORIAN", angle: Float = 10f) {
     val normalRatio = 1f / 4f
     val projectedRatio = normalRatio * sin(angle * PI / 180f)
     TrollslateTheme {

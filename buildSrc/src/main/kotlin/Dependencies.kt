@@ -36,6 +36,7 @@ object Libs {
         const val ui = "androidx.compose.ui:ui:$version"
         const val uiUtil = "androidx.compose.ui:ui-util:$version"
         const val activity = "androidx.activity:activity-compose:1.4.0"
+        const val navigation = "androidx.navigation:navigation-compose:2.4.1"
 
         const val uiTest = "androidx.compose.ui:ui-test:$version"
         const val uiTestJUnit = "androidx.compose.ui:ui-test-junit4:$version"

@@ -10,6 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import org.scotthamilton.trollslate.data.decodeUrlBase64
+import org.scotthamilton.trollslate.data.toUrlBase64
 import org.scotthamilton.trollslate.ui.*
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
 
@@ -27,12 +29,15 @@ class MainActivity : ComponentActivity() {
                         route = "troll?text={text}&angle={angle}",
                         arguments =
                             listOf(
-                                navArgument("text") { defaultValue = "INVALID" },
+                                navArgument("text") {
+                                    defaultValue = "INVALID".toUrlBase64()
+                                },
                                 navArgument("angle") { defaultValue = 45f }
                             )
                     ) {
+                        val text = it.arguments?.getString("text")?.decodeUrlBase64()
                         TrollContent(
-                            it.arguments?.getString("text") ?: "INVALID",
+                            text ?: "INVALID",
                             it.arguments?.getFloat("angle") ?: 45f
                         )
                     }

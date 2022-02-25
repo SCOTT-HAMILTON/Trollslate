@@ -1,5 +1,6 @@
 package org.scotthamilton.trollslate.ui
 
+import android.util.Base64
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.CubicBezierEasing
@@ -21,6 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import org.scotthamilton.trollslate.data.toUrlBase64
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -41,7 +45,7 @@ fun TrollFab(
         FloatingActionButton(
             onClick = {
                 if (!trollTextFieldData.showError.value) {
-                    val text = trollTextFieldData.text.value
+                    val text = trollTextFieldData.text.value.toUrlBase64()
                     val angle = phoneAngleSelectorData.currentAngle.value
                     navController?.navigate(route = "troll?text=$text&angle=$angle")
                 }

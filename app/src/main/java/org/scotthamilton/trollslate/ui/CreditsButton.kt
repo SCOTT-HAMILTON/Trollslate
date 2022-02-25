@@ -1,6 +1,7 @@
 package org.scotthamilton.trollslate.ui
 
 import android.app.Activity
+import android.util.Base64
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
@@ -16,6 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.scotthamilton.trollslate.R
+import org.scotthamilton.trollslate.data.toUrlBase64
+import java.nio.charset.StandardCharsets
+import java.util.*
 
 @Composable
 fun CreditsButton(
@@ -30,7 +34,9 @@ fun CreditsButton(
         OutlinedButton(
             onClick = {
                 activity?.getString(R.string.credits_text)?.let {
-                    val text = it.trimIndent().replace(Regex("""\n*"""), " ")
+                    val text =
+                        it.trimIndent().replace(Regex("""\n*"""),
+                            " ").toUrlBase64()
                     navController?.navigate(route = "troll?text=$text&angle=10.0")
                 }
             },

@@ -21,7 +21,8 @@ import org.scotthamilton.trollslate.R
 fun CreditsButton(
     state: MutableTransitionState<Boolean>,
     navController: NavController? = null,
-    activity: Activity?) {
+    activity: Activity?
+) {
     AnimatedVisibility(
         visibleState = state,
         exit = fadeOut(animationSpec = tween(durationMillis = 10))
@@ -30,14 +31,10 @@ fun CreditsButton(
             onClick = {
                 activity?.getString(R.string.credits_text)?.let {
                     val text = it.trimIndent().replace(Regex("""\n*"""), " ")
-                    navController?.navigate(
-                        route = "troll?text=$text&angle=10.0"
-                    )
+                    navController?.navigate(route = "troll?text=$text&angle=10.0")
                 }
             },
-            Modifier
-                .padding(top = 10.dp, end = 10.dp)
-                .testTag("creditsButton"),
+            Modifier.padding(top = 10.dp, end = 10.dp).testTag("creditsButton"),
         ) {
             Text(
                 text = stringResource(id = R.string.credits),

@@ -31,18 +31,14 @@ fun defaultTrollTextFieldData(): TrollTextFieldData =
 fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineScope) -> Unit) {
     val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf(TextFieldValue("")) }
-    val isAllowedChar = { c: Char ->
-        c.isWhitespace() || c in FontData.lettersCodonTable.keys
-    }
+    val isAllowedChar = { c: Char -> c.isWhitespace() || c in FontData.lettersCodonTable.keys }
     TextField(
         modifier = Modifier.width(300.dp).height(80.dp).testTag("trollTextInput"),
         value = text,
         onValueChange = {
             text = it
             data.text.value = text.text.uppercase()
-            data.showError.value =
-                !data.text.value.all(isAllowedChar) ||
-                    data.text.value.isEmpty()
+            data.showError.value = !data.text.value.all(isAllowedChar) || data.text.value.isEmpty()
             scope.launch { withContext(Dispatchers.IO) { onValueChanged(this) } }
         },
         visualTransformation = { annotatedString ->

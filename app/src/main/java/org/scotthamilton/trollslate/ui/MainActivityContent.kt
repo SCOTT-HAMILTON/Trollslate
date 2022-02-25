@@ -29,9 +29,7 @@ fun MainActivityContent(
 ) {
     TrollslateTheme {
         Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -48,20 +46,15 @@ fun MainActivityContent(
                         trollTextFieldData = trollTextFieldData,
                         phoneAngleSelectorData = phoneAngleSelectorData,
                         navController = navController,
-                        activity = activity,
                         state = trollFabState,
                     )
                     CreditsButton(creditState, navController, activity)
                 }
-                Spacer(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(20.dp))
+                Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 20.dp)
+                    modifier = Modifier.fillMaxSize().padding(bottom = 20.dp)
                 ) {
                     LettersSlide()
                     TrollTextField(trollTextFieldData) {

@@ -15,15 +15,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import org.scotthamilton.trollslate.ui.defaultPhoneAngleSelectorData
-import org.scotthamilton.trollslate.ui.defaultTrollTextFieldData
 import org.scotthamilton.trollslate.utils.rollToAcceptableAngle
 import org.scotthamilton.trollslate.utils.rotationVectorToRollAngle
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainActivityScaffold(navController: NavController?,  activity: Activity?) {
+fun MainActivityScaffold(navController: NavController?, activity: Activity?) {
     val sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
     val rotationSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
     val snackBarHostState = remember { SnackbarHostState() }

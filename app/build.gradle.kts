@@ -29,9 +29,7 @@ android {
 }
 
 dependencies {
-    implementations(
-        Libs.AndroidX.main + listOf(Libs.Compose.navigation)
-    )
+    implementations(Libs.AndroidX.main + listOf(Libs.Compose.navigation))
     implementations(Libs.Compose.main)
     add("testImplementation", Libs.junit)
     androidTestImplementations(

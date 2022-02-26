@@ -79,7 +79,8 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
                             }
                             delta
                         }
-                ),
+                )
+                .testTag("phoneAngleScroller"),
         contentAlignment = Alignment.Center
     ) {
         Column(

@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.scotthamilton.trollslate.utils.toUrlBase64
@@ -47,7 +48,12 @@ fun TrollFab(
                     navController?.navigate(route = "troll?text=$text&angle=$angle")
                 }
             },
-            modifier = modifier.padding(end = 20.dp, top = 20.dp).width(60.dp).height(60.dp),
+            modifier =
+                modifier
+                    .padding(end = 20.dp, top = 20.dp)
+                    .width(60.dp)
+                    .height(60.dp)
+                    .testTag("trollFab"),
             shape = CircleShape
         ) {
             Icon(

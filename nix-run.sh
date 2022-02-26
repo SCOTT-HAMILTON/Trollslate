@@ -9,6 +9,6 @@ export ANDROID_HOME=~/Android/Sdk/
 # /home/scott/.cache/fdroidserver/gradle/7.3.3/bin/gradle app:dependencies
 # ./gradlew app:dependencies --scan
 # ./gradlew wrapper --gradle-version 7.4
-# ./gradlew app:assembleDebug app:assembleAndroidTest --scan
-./gradlew app:assembleDebug --scan
+./gradlew app:assembleDebug app:assembleAndroidTest --scan
+# ./gradlew app:assembleDebug --scan
 # ./gradlew clean

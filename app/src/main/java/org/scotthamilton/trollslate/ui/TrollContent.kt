@@ -25,14 +25,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
-import org.scotthamilton.trollslate.R
-import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import kotlin.math.PI
 import kotlin.math.sin
-
+import org.scotthamilton.trollslate.R
+import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
@@ -47,22 +46,35 @@ private fun TrollShareFab(
     FloatingActionButton(
         onClick = {
             activity?.let { activity ->
-// Thanks to https://github.com/IanDarwin/Android-Cookbook-Examples/blob/master/PdfShare/src/main/java/com/example/pdfshare/MainActivity.java
+                // Thanks to
+                // https://github.com/IanDarwin/Android-Cookbook-Examples/blob/master/PdfShare/src/main/java/com/example/pdfshare/MainActivity.java
                 try {
                     val pdfDirPath = File(activity.filesDir, "pdfs")
                     pdfDirPath.mkdirs()
                     val file = File(pdfDirPath, "TrollText.pdf")
                     val contentUri: Uri =
-                        FileProvider.getUriForFile(activity, "org.scotthamilton.trollslate.fileprovider", file)
+                        FileProvider.getUriForFile(
+                            activity,
+                            "org.scotthamilton.trollslate.fileprovider",
+                            file
+                        )
                     FileOutputStream(file).let {
-                        drawLettersToPdf(text, angle, strokeWidth = strokeWidth, out = it, letter_size = letterSize)
+                        drawLettersToPdf(
+                            text,
+                            angle,
+                            strokeWidth = strokeWidth,
+                            out = it,
+                            letter_size = letterSize
+                        )
                         it.close()
                     }
                     activity.startActivity(
                         Intent(Intent.ACTION_SEND).apply {
                             type = "application/pdf"
-                            putExtra(Intent.EXTRA_SUBJECT,
-                                activity.getString(R.string.intent_pdf_share_subject))
+                            putExtra(
+                                Intent.EXTRA_SUBJECT,
+                                activity.getString(R.string.intent_pdf_share_subject)
+                            )
                             putExtra(Intent.EXTRA_STREAM, contentUri)
                         }
                     )
@@ -71,39 +83,34 @@ private fun TrollShareFab(
                 }
             }
         },
-        modifier = modifier
-            .padding(end = 15.dp, top = 15.dp)
-            .width(60.dp)
-            .height(60.dp)
-        ,
+        modifier = modifier.padding(end = 15.dp, top = 15.dp).width(60.dp).height(60.dp),
         shape = CircleShape
     ) {
         Icon(
             imageVector = Icons.Sharp.Share,
             "",
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.onPrimary)
-                .padding(end = 5.dp)
+            modifier =
+                Modifier.fillMaxSize()
+                    .background(MaterialTheme.colorScheme.onPrimary)
+                    .padding(end = 5.dp)
         )
     }
 }
 
 @Composable
-private fun angleToLetterSize(angle: Float) : Size {
+private fun angleToLetterSize(angle: Float): Size {
     val normalRatio = 1f / 4f
     val projectedRatio = normalRatio * sin(angle * PI / 180f)
     return (LocalConfiguration.current.screenHeightDp * projectedRatio).let {
-            if (it > 50f) {
-                Size(50f, 50f / projectedRatio.toFloat())
-            } else {
-                Size(it.toFloat(), LocalConfiguration.current.screenHeightDp.toFloat())
-            }
+        if (it > 50f) {
+            Size(50f, 50f / projectedRatio.toFloat())
+        } else {
+            Size(it.toFloat(), LocalConfiguration.current.screenHeightDp.toFloat())
         }
+    }
 }
 
-private fun letterSizeToStokeWidth(letterSize: Size): Float =
-    letterSize.width * 0.2f
+private fun letterSizeToStokeWidth(letterSize: Size): Float = letterSize.width * 0.2f
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Preview(showBackground = true)
@@ -112,27 +119,23 @@ fun TrollContent(text: String = "DORIAN", angle: Float = 10f, activity: Activity
     val letterSize = angleToLetterSize(angle)
     val strokeWidth = letterSizeToStokeWidth(letterSize)
     TrollslateTheme {
-        Surface(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)) {
+        Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyRow(
                     modifier =
-                    Modifier
-                        .background(Color.White)
-                        .fillMaxSize()
-                        .padding(20.dp)
-                        .testTag("trollActivityLazyRow"),
+                        Modifier.background(Color.White)
+                            .fillMaxSize()
+                            .padding(20.dp)
+                            .testTag("trollActivityLazyRow"),
                     horizontalArrangement = Arrangement.spacedBy(0.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     items(text.length) { index ->
                         Letter(
                             modifier =
-                            Modifier
-                                .background(Color.White)
-                                .width(letterSize.width.dp)
-                                .height(letterSize.height.dp),
+                                Modifier.background(Color.White)
+                                    .width(letterSize.width.dp)
+                                    .height(letterSize.height.dp),
                             letter = text.elementAt(index),
                             backgroundColor = Color.White,
                             textColor = Color.Black,
@@ -145,7 +148,7 @@ fun TrollContent(text: String = "DORIAN", angle: Float = 10f, activity: Activity
                     modifier = Modifier.align(Alignment.TopEnd),
                     activity = activity,
                     text = text,
-                    angle = angle*0.5f,
+                    angle = angle * 0.5f,
                 )
             }
         }

@@ -11,6 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.scotthamilton.trollslate.ui.MainActivityContent
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
 import tools.fastlane.screengrab.FileWritingScreenshotCallback
 import tools.fastlane.screengrab.Screengrab
@@ -35,24 +36,22 @@ class ExampleInstrumentedTest {
         assertEquals("org.scotthamilton.trollslate", appContext.packageName)
     }
 
+    @OptIn(ExperimentalTestApi::class)
     @Test
     fun mainActivityScreenshots() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
 
-        composeTestRule.setContent { TrollslateTheme { MainActivityContent(null) } }
+        composeTestRule.setContent { TrollslateTheme { MainActivityContent() } }
         composeTestRule.onNodeWithTag("gyroFab").performClick()
         composeTestRule.takeScreenShot("start")
-    }
-
-    @OptIn(ExperimentalTestApi::class)
-    @Test
-    fun trollActivityScreenshots() {
-        Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
-        composeTestRule.setContent {
-            TrollslateTheme { TrollActivityContent("HELLO WORLD " * 5, 10f) }
+        composeTestRule.onNodeWithTag("trollTextInput").performTextInput("HELLO WORLD" * 5)
+        composeTestRule.onNodeWithTag("phoneAngleScroller").performGesture {
+            swipeUp(startY = 10000f, endY = 0f)
         }
-        composeTestRule.onNodeWithTag("trollActivityLazyRow").performScrollToIndex(12)
-        composeTestRule.takeScreenShot("troll")
+        composeTestRule.onNodeWithTag("trollFab").performClick()
+        composeTestRule.waitForIdle()
+        //        composeTestRule.onNodeWithTag("trollActivityLazyRow").performScrollToIndex(12)
+        composeTestRule.takeScreenShot("end")
     }
 }
 

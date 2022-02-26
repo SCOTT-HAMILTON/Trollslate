@@ -43,7 +43,6 @@ fun LettersSlide() {
                     letter = letters.elementAt(index),
                     backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     textColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    padding = 10f,
                     angle = 30f,
                     adaptiveStrokes = true
                 )

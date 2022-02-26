@@ -63,11 +63,13 @@ Trollslate is delivered as it is under the well known MIT License.
 
 **References that helped**
  - [sample rotation sensor app by kplatfoot] : <https://github.com/kplatfoot/android-rotation-sensor-sample>
- - [android documentation] : <https://developer.android.com/>
  - [pchmielowski's blog post on automated compose-espresso screenshots] : <https://dev.to/pchmielowski/automate-taking-screenshots-of-android-app-with-jetpack-compose-2950>
+ - [implementation of Intent Pdf Sharing by IanDarwin] : <https://github.com/IanDarwin/Android-Cookbook-Examples/blob/master/PdfShare/src/main/java/com/example/pdfshare/MainActivity.java>
+ - [android documentation] : <https://developer.android.com/>
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
    [sample rotation sensor app by kplatfoot]: <https://github.com/kplatfoot/android-rotation-sensor-sample>
    [pchmielowski's blog post on automated compose-espresso screenshots]: <https://dev.to/pchmielowski/automate-taking-screenshots-of-android-app-with-jetpack-compose-2950>
+   [implementation of Intent Pdf Sharing by IanDarwin]: <https://github.com/IanDarwin/Android-Cookbook-Examples/blob/master/PdfShare/src/main/java/com/example/pdfshare/MainActivity.java>
    [android documentation]: <https://developer.android.com/>

@@ -1,4 +1,4 @@
-package org.scotthamilton.trollslate.data
+package org.scotthamilton.trollslate.utils
 
 import android.util.Base64
 import java.nio.charset.StandardCharsets

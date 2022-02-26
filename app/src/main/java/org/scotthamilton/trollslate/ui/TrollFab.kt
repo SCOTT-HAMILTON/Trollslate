@@ -21,7 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.scotthamilton.trollslate.data.toUrlBase64
+import org.scotthamilton.trollslate.utils.toUrlBase64
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

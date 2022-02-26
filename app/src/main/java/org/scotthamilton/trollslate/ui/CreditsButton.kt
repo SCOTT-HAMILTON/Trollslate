@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import java.util.*
 import org.scotthamilton.trollslate.R
-import org.scotthamilton.trollslate.data.toUrlBase64
+import org.scotthamilton.trollslate.utils.toUrlBase64
 
 @Composable
 fun CreditsButton(

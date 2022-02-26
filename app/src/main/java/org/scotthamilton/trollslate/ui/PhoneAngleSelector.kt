@@ -41,7 +41,7 @@ fun defaultPhoneAngleSelectorData(
     snackBarHostState: SnackbarHostState = SnackbarHostState()
 ): PhoneAngleSelectorData =
     PhoneAngleSelectorData(
-        angleRange = IntRange(10, 80),
+        angleRange = IntRange(5, 80),
         currentAngle = mutableStateOf(80f),
         useGyroscope = mutableStateOf(false),
         gyroscopeMissing = gyroscopeMissing,

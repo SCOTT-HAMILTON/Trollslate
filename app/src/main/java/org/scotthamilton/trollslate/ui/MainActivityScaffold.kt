@@ -67,7 +67,6 @@ fun MainActivityScaffold(navController: NavController?, activity: Activity?) {
                 )
             },
             topBar = {},
-            floatingActionButtonPosition = FabPosition.Center,
             content = {
                 MainActivityContent(
                     phoneAngleSelectorData = phoneAngleSelectorData,

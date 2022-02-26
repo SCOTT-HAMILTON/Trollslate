@@ -1,14 +1,15 @@
 package org.scotthamilton.trollslate.ui
 
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.Point
 import android.graphics.PointF
+import android.graphics.pdf.PdfDocument
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -17,18 +18,28 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.minus
-import androidx.core.graphics.plus
 import kotlin.math.*
 import org.scotthamilton.trollslate.data.FontData
 import org.scotthamilton.trollslate.data.HLine
 import org.scotthamilton.trollslate.data.VLine
+import java.io.OutputStream
 
 enum class RangeType {
     INDIVIDUALS,
     GROUP
 }
+
+data class DrawData(
+    val letter_size: Size,
+    val offset: Offset = Offset(0f, 0f),
+    val textColor: Color,
+    val strokeWidth: Float,
+    val angle: Float,
+    val adaptiveStrokes: Boolean,
+    val drawable: Any
+)
 
 data class TypedRange(val range: IntRange, val type: RangeType) {
     override fun toString() = (if (type == RangeType.INDIVIDUALS) "I" else "G") + "(${range})"
@@ -85,12 +96,7 @@ private fun parseCodon(codon: String): Pair<List<TypedRange>, Point>? {
 @RequiresApi(Build.VERSION_CODES.N)
 fun drawCodonLetter(
     codon: String,
-    canvas_size: Size,
-    color: Color,
-    strokeWidth: Float,
-    angle: Float,
-    adaptiveStrokes: Boolean,
-    drawScope: DrawScope
+    drawData: DrawData,
 ) {
     val parsedCodon = parseCodon(codon)
     if (parsedCodon == null) {
@@ -104,23 +110,13 @@ fun drawCodonLetter(
                     drawIndivCode(
                         codon.substring(it.range),
                         curPosPc,
-                        canvas_size,
-                        color,
-                        strokeWidth,
-                        angle,
-                        adaptiveStrokes,
-                        drawScope
+                        drawData
                     )
                 } else {
                     drawGroupCode(
                         codon.substring(it.range),
                         curPosPc,
-                        canvas_size,
-                        color,
-                        strokeWidth,
-                        angle,
-                        adaptiveStrokes,
-                        drawScope
+                        drawData
                     )
                 }
         }
@@ -160,10 +156,19 @@ private fun Codon2Letter(
     adaptiveStrokes: Boolean
 ) {
     Canvas(
-        modifier = modifier.background(backgroundColor).width(50.dp),
+        modifier = modifier.background(backgroundColor),
         onDraw = {
-            drawRect(color = backgroundColor)
-            drawCodonLetter(codon, size, textColor, strokeWidth, angle, adaptiveStrokes, this)
+            drawRect(color = backgroundColor, topLeft = Offset.Zero, size = size, style = Fill)
+            drawCodonLetter(codon,
+                DrawData(
+                    letter_size = size,
+                    textColor = textColor,
+                    strokeWidth = strokeWidth,
+                    angle = angle,
+                    adaptiveStrokes = adaptiveStrokes,
+                    drawable = this
+                )
+            )
         }
     )
 }
@@ -199,12 +204,7 @@ private fun Path.lineTo(point: PointF) {
 fun drawIndivCode(
     code: String,
     start_cur_pos_pc: Point,
-    canvas_size: Size,
-    color: Color,
-    strokeWidth: Float,
-    angle: Float,
-    adaptiveStrokes: Boolean,
-    drawScope: DrawScope
+    drawData: DrawData
 ): Point {
     var curPosPc = start_cur_pos_pc
     code.forEach {
@@ -212,12 +212,7 @@ fun drawIndivCode(
             drawPcLine(
                 curPosPc,
                 new_pos,
-                canvas_size,
-                color,
-                strokeWidth,
-                angle,
-                adaptiveStrokes,
-                drawScope
+                drawData
             )
             curPosPc = new_pos
         }
@@ -244,24 +239,14 @@ fun applyIndivCodeToPath(
 fun drawGroupCode(
     code: String,
     start_cur_pos_pc: Point,
-    canvas_size: Size,
-    color: Color,
-    strokeWidth: Float,
-    angle: Float,
-    adaptiveStrokes: Boolean,
-    drawScope: DrawScope
+    drawData: DrawData
 ): Point {
     val newPos = groupCode2Point(code, start_cur_pos_pc)
     if (!(code.length >= 2 && code[1] == '_')) {
         drawPcLine(
             start_cur_pos_pc,
             newPos,
-            canvas_size,
-            color,
-            strokeWidth,
-            angle,
-            adaptiveStrokes,
-            drawScope
+            drawData
         )
     }
     return newPos
@@ -294,57 +279,33 @@ private fun flerp(from: FloatRange, to: FloatRange, value: Float): Float =
 private fun drawPcLine(
     start_cur_pos_pc: Point,
     newPos: Point,
-    canvas_size: Size,
-    color: Color,
-    strokeWidth: Float,
-    angle: Float,
-    adaptiveStrokes: Boolean,
-    drawScope: DrawScope
+    drawData: DrawData
 ) {
-    val start = pcToPoint(start_cur_pos_pc, canvas_size)
-    val end = pcToPoint(newPos, canvas_size)
-    if (adaptiveStrokes && abs(start.x - end.x) > 0.10f) {
+    val start = pcToPoint(start_cur_pos_pc, drawData.letter_size)
+    val end = pcToPoint(newPos, drawData.letter_size)
+    if (drawData.adaptiveStrokes && abs(start.x - end.x) > 0.10f) {
         val (s, e) = if (start.x > end.x) end to start else start to end
-        val angleSin = sin(angle * PI / 180f).toFloat()
+        val angleSin = sin(drawData.angle * PI / 180f).toFloat()
         val midY = (newPos.y + start_cur_pos_pc.y) / 2f
 
-        val (normAB, length) = (e - s).let { (it / it.length()) to it.length() }
-        val factor = flerp(FloatRange(0f, 100f), FloatRange(0.2f, 0.4f), midY)
-        val a = s + normAB * length * factor * 0.5f
-        val b = e - normAB * length * factor * 0.5f
-        val newLength = (b - a).length()
+        val length = (e - s).length()
 
-        var stroke =
+        val stroke =
             flerp(FloatRange(0f, 100f), FloatRange(1f / angleSin, 2.5f / angleSin), midY) *
-                strokeWidth
+                    drawData.strokeWidth
 
-        if (abs(start.y - end.y) < 0.10f) {
-            val y = min(canvas_size.height - stroke + strokeWidth / 2f, s.y - strokeWidth / 2f)
-            drawScope.drawRect(
-                color = color,
-                style = Fill,
-                topLeft = Offset(s.x - strokeWidth / 2f, y),
-                size = Size(length + strokeWidth, stroke)
-            )
-        } else {
-            if (newLength < stroke) {
-                stroke *= 0.1f
-            }
-            drawScope.drawLine(
-                color = color,
-                Offset(a.x, a.y),
-                Offset(b.x, b.y),
-                stroke,
-                cap = StrokeCap.Square
-            )
-        }
+        val y = min(drawData.letter_size.height - stroke + drawData.strokeWidth / 2f, s.y - drawData.strokeWidth / 2f)
+        drawData.drawable.drawRect(
+            color = drawData.textColor,
+            topLeft = Offset(s.x - drawData.strokeWidth / 2f, y)+drawData.offset,
+            size = Size(length + drawData.strokeWidth, stroke)
+        )
     } else {
-        drawScope.drawLine(
-            color = color,
-            Offset(start.x, start.y),
-            Offset(end.x, end.y),
-            strokeWidth,
-            cap = StrokeCap.Square
+        drawData.drawable.drawLine(
+            color = drawData.textColor,
+            drawData.strokeWidth,
+            Offset(start.x, start.y)+drawData.offset,
+            Offset(end.x, end.y)+drawData.offset
         )
     }
 }
@@ -366,7 +327,6 @@ fun Letter(
     letter: Char = 'A',
     backgroundColor: Color,
     textColor: Color,
-    padding: Float,
     strokeWidth: Float = 5f,
     angle: Float = 80f,
     adaptiveStrokes: Boolean = true
@@ -375,22 +335,113 @@ fun Letter(
     if (codon == null) {
         println("[error] unsupported character `$letter`, can't display it out.")
     } else {
-        Box(
-            modifier =
-                modifier
-                    .fillMaxSize()
-                    .background(backgroundColor)
-                    .padding(start = padding.dp, end = padding.dp)
-        ) {
-            Codon2Letter(
-                modifier.align(Alignment.Center).background(backgroundColor),
-                codon,
-                textColor,
-                backgroundColor,
+        Codon2Letter(
+            modifier.background(backgroundColor),
+            codon,
+            textColor,
+            backgroundColor,
+            strokeWidth,
+            angle,
+            adaptiveStrokes
+        )
+    }
+}
+
+private fun Any.drawLine(color: Color, strokeWidth: Float, start: Offset, end: Offset) {
+    when (this) {
+        is DrawScope -> {
+            this.drawLine(
+                color = color,
+                start,
+                end,
                 strokeWidth,
-                angle,
-                adaptiveStrokes
+                cap = StrokeCap.Square
+            )
+        }
+        is Canvas -> {
+            this.drawLine(
+                start.x, start.y,
+                end.x, end.y,
+                Paint().apply {
+                    setColor(color.toArgb())
+                    style = Paint.Style.STROKE
+                    setStrokeWidth(strokeWidth)
+                    strokeCap = Paint.Cap.SQUARE
+                }
             )
         }
     }
 }
+
+private fun Any.drawRect(color: Color, topLeft: Offset, size: Size) {
+    when (this) {
+        is DrawScope -> {
+            this.drawRect(
+                color = color,
+                style = Fill,
+                topLeft = topLeft,
+                size = size
+            )
+        }
+        is Canvas -> {
+            this.drawRect(
+                topLeft.x, topLeft.y,
+                topLeft.x + size.width, topLeft.y + size.height,
+                Paint().apply {
+                    setColor(color.toArgb())
+                    style = Paint.Style.FILL
+                }
+            )
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.N)
+fun drawLettersToPdf(
+    letters: String,
+    angle: Float = 80f,
+    strokeWidth: Float = 5f,
+    letter_size: Size,
+    adaptiveStrokes: Boolean = true,
+    out: OutputStream
+) {
+    val padding = letter_size.height*0.1f
+    val widthSpace = letter_size.width*0.04f
+    val canvasSize = Size(
+        (letter_size.width+widthSpace)*letters.length.toFloat()+padding*2f,
+        letter_size.height+padding*2f
+    )
+    if (letters.isEmpty()) {
+        println("[error] no letters to write into the pdf: `$letters`.")
+    } else {
+        val doc = PdfDocument()
+        val page = doc.startPage(
+            PdfDocument.PageInfo.Builder(
+                canvasSize.width.roundCeil(), canvasSize.height.roundCeil(), 1
+            ).create()
+        )
+        letters.forEachIndexed { index, letter ->
+            FontData.lettersCodonTable[letter]?.let {
+                drawCodonLetter(
+                    it,
+                    DrawData(
+                        letter_size = letter_size,
+                        offset = Offset(
+                            padding+index*(widthSpace + letter_size.width), padding
+                        ),
+                        textColor = Color.Black,
+                        strokeWidth = strokeWidth,
+                        angle = angle,
+                        adaptiveStrokes = adaptiveStrokes,
+                        drawable = page.canvas
+                    )
+                )
+            }
+        }
+        doc.finishPage(page)
+        doc.writeTo(out)
+        doc.close()
+    }
+}
+
+private fun Float.roundCeil(): Int = ceil(this).toInt()

@@ -10,8 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import org.scotthamilton.trollslate.data.decodeUrlBase64
-import org.scotthamilton.trollslate.data.toUrlBase64
+import org.scotthamilton.trollslate.utils.decodeUrlBase64
+import org.scotthamilton.trollslate.utils.toUrlBase64
 import org.scotthamilton.trollslate.ui.*
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
 
@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                             )
                     ) {
                         val text = it.arguments?.getString("text")?.decodeUrlBase64()
-                        TrollContent(text ?: "INVALID", it.arguments?.getFloat("angle") ?: 45f)
+                        TrollContent(text ?: "INVALID", it.arguments?.getFloat("angle") ?: 45f, this@MainActivity)
                     }
                 }
             }

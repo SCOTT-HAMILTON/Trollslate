@@ -49,8 +49,7 @@ class ExampleInstrumentedTest {
         composeTestRule.onNodeWithTag("phoneAngleScroller").performGesture {
             swipeDown(startY = 0f, endY = 10000f)
         }
-        composeTestRule.onNodeWithTag("trollTextField").performTextInput(
-            "HELLO WORLD" * 5)
+        composeTestRule.onNodeWithTag("trollTextField").performTextInput("HELLO WORLD" * 5)
         composeTestRule.takeScreenShot("start")
     }
 
@@ -60,15 +59,12 @@ class ExampleInstrumentedTest {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
         composeTestRule.setContent {
             TrollslateTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    TrollContent("HELLO WORLD" * 5, 10f)
-                }
+                Surface(modifier = Modifier.fillMaxSize()) { TrollContent("HELLO WORLD" * 5, 10f) }
             }
         }
         composeTestRule.onNodeWithTag("trollActivityLazyRow").performScrollToIndex(12)
         composeTestRule.takeScreenShot("troll")
     }
-
 }
 
 // Thanks to

@@ -83,20 +83,16 @@ private fun TrollShareFab(
                 }
             }
         },
-        modifier = modifier
-            .padding(end = 15.dp, top = 15.dp)
-            .width(60.dp)
-            .height(60.dp),
+        modifier = modifier.padding(end = 15.dp, top = 15.dp).width(60.dp).height(60.dp),
         shape = CircleShape
     ) {
         Icon(
             imageVector = Icons.Sharp.Share,
             "",
             modifier =
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.onPrimary)
-                .padding(end = 5.dp)
+                Modifier.fillMaxSize()
+                    .background(MaterialTheme.colorScheme.onPrimary)
+                    .padding(end = 5.dp)
         )
     }
 }
@@ -123,30 +119,24 @@ fun TrollContent(text: String = "DORIAN", angle: Float = 5f, activity: Activity?
     val letterSize = angleToLetterSize(angle)
     val strokeWidth = letterSizeToStokeWidth(letterSize)
     TrollslateTheme {
-        Surface(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)) {
+        Surface(modifier = Modifier.fillMaxSize().background(Color.White)) {
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyRow(
                     modifier =
-                    Modifier
-                        .background(Color.White)
-                        .fillMaxSize()
-                        .padding(20.dp)
-                        .testTag("trollActivityLazyRow"),
-                    horizontalArrangement = Arrangement.spacedBy((letterSize.width*0.4f).dp),
+                        Modifier.background(Color.White)
+                            .fillMaxSize()
+                            .padding(20.dp)
+                            .testTag("trollActivityLazyRow"),
+                    horizontalArrangement = Arrangement.spacedBy((letterSize.width * 0.4f).dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    items(1) {
-                        Spacer(modifier = Modifier.fillMaxHeight().width(strokeWidth.dp))
-                    }
+                    items(1) { Spacer(modifier = Modifier.fillMaxHeight().width(strokeWidth.dp)) }
                     items(text.length) { index ->
                         Letter(
                             modifier =
-                            Modifier
-                                .background(Color.White)
-                                .width(letterSize.width.dp)
-                                .height(letterSize.height.dp),
+                                Modifier.background(Color.White)
+                                    .width(letterSize.width.dp)
+                                    .height(letterSize.height.dp),
                             letter = text.elementAt(index),
                             backgroundColor = Color.White,
                             textColor = Color.Black,

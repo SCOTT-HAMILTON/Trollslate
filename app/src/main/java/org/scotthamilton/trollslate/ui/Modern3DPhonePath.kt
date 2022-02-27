@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import org.scotthamilton.trollslate.data.FontData
 
 @RequiresApi(Build.VERSION_CODES.N)
-fun modern3DPhonePath(phoneDims: SizeF): Path {
+fun modern3DPhonePath(phoneDims: SizeF, letter: Char): Path {
     val bottomStripFrac = 0.1f
     val topStripFrac = 0.1f
     val bottomButtonSizeFrac = SizeF(0.05f, 0.24f)
@@ -80,7 +80,7 @@ fun modern3DPhonePath(phoneDims: SizeF): Path {
                 )
             }
         )
-        FontData.lettersCodonTable['A']?.let { codon ->
+        FontData.lettersCodonTable[letter]?.let { codon ->
             val size = Size(phoneDims.height * 0.3f, phoneDims.width * 0.3f)
             codonLetterToPath(codon, size).let {
                 val rotatedPath =
@@ -106,38 +106,43 @@ fun Canvas3DPhone(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     onBackgroundColor: Color = MaterialTheme.colorScheme.onBackground,
-    angle: Float
+    angle: Float,
+    letter: Char
 ) {
-    Canvas(
-        modifier = modifier.background(backgroundColor),
-        onDraw = {
-            val ratio = size.width / size.height
-            val phoneDims =
-                if (ratio > 2.0f) {
-                    SizeF(size.height * 2f, size.height)
-                } else {
-                    SizeF(size.width, size.width / 2f)
+    if (letter in FontData.lettersCodonTable.keys) {
+        Canvas(
+            modifier = modifier.background(backgroundColor),
+            onDraw = {
+                val ratio = size.width / size.height
+                val phoneDims =
+                    if (ratio > 2.0f) {
+                        SizeF(size.height * 2f, size.height)
+                    } else {
+                        SizeF(size.width, size.width / 2f)
+                    }
+                val phonePath = modern3DPhonePath(phoneDims, letter)
+                drawIntoCanvas { canvas ->
+                    val matrix = Matrix()
+                    Camera()
+                        .apply {
+                            rotateX(68f)
+                            rotateY(-angle)
+                            translate(-150f, 0f, 100f)
+                        }
+                        .getMatrix(matrix)
+                    canvas.nativeCanvas.concat(matrix)
+                    canvas.nativeCanvas.drawPath(
+                        phonePath.asAndroidPath(),
+                        Paint().apply {
+                            color = onBackgroundColor.toArgb()
+                            strokeWidth = size.width * 0.009f
+                            style = Paint.Style.STROKE
+                        }
+                    )
                 }
-            val phonePath = modern3DPhonePath(phoneDims)
-            drawIntoCanvas { canvas ->
-                val matrix = Matrix()
-                Camera()
-                    .apply {
-                        rotateX(68f)
-                        rotateY(-angle)
-                        translate(-150f, 0f, 100f)
-                    }
-                    .getMatrix(matrix)
-                canvas.nativeCanvas.concat(matrix)
-                canvas.nativeCanvas.drawPath(
-                    phonePath.asAndroidPath(),
-                    Paint().apply {
-                        color = onBackgroundColor.toArgb()
-                        strokeWidth = size.width * 0.009f
-                        style = Paint.Style.STROKE
-                    }
-                )
             }
-        }
-    )
+        )
+    } else {
+        println("[error] invalid letter `$letter`, can't draw 3D phone.")
+    }
 }

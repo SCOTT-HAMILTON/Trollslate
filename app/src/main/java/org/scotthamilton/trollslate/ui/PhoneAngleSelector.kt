@@ -1,7 +1,6 @@
 package org.scotthamilton.trollslate.ui
 
 import android.app.Activity
-import android.provider.Settings.Global.getString
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -9,10 +8,11 @@ import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
@@ -31,6 +31,7 @@ data class PhoneAngleSelectorData(
     val currentAngle: MutableState<Float>,
     val useGyroscope: MutableState<Boolean>,
     val gyroscopeMissing: MutableState<Boolean>,
+    val phone3DLetter: MutableState<Char>,
     val snackBarHostState: SnackbarHostState,
     val activity: Activity?
 )
@@ -45,6 +46,7 @@ fun defaultPhoneAngleSelectorData(
         currentAngle = mutableStateOf(80f),
         useGyroscope = mutableStateOf(false),
         gyroscopeMissing = gyroscopeMissing,
+        phone3DLetter = mutableStateOf('A'),
         snackBarHostState = snackBarHostState,
         activity = activity
     )
@@ -61,26 +63,27 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
     var currentScrollOffset = ilerp(data.angleRange, scrollRange, data.currentAngle.value.toInt())
     Box(
         modifier =
-            Modifier.height(200.dp)
-                .width(300.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(20)
-                )
-                .scrollable(
-                    orientation = Orientation.Vertical,
-                    state =
-                        rememberScrollableState { delta ->
-                            val newOffset = currentScrollOffset - delta
-                            if (scrollRange.first < newOffset && newOffset < scrollRange.last) {
-                                currentScrollOffset = newOffset
-                                data.currentAngle.value =
-                                    ilerp(scrollRange, data.angleRange, currentScrollOffset.toInt())
-                            }
-                            delta
-                        }
-                )
-                .testTag("phoneAngleScroller"),
+        Modifier
+            .height(200.dp)
+            .width(300.dp)
+            .background(
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                shape = RoundedCornerShape(20)
+            )
+            .scrollable(
+                orientation = Orientation.Vertical,
+                state =
+                rememberScrollableState { delta ->
+                    val newOffset = currentScrollOffset - delta
+                    if (scrollRange.first < newOffset && newOffset < scrollRange.last) {
+                        currentScrollOffset = newOffset
+                        data.currentAngle.value =
+                            ilerp(scrollRange, data.angleRange, currentScrollOffset.toInt())
+                    }
+                    delta
+                }
+            )
+            .testTag("phoneAngleScroller"),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -98,42 +101,62 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
             Canvas3DPhone(
                 modifier = Modifier.size(120.dp, 60.dp).padding(start = 10.dp),
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-                angle = data.currentAngle.value
+                angle = data.currentAngle.value,
+                letter = data.phone3DLetter.value
             )
         }
 
-        val fabDisabledColor = MaterialTheme.colorScheme.surface
-        val fabEnabledColor = MaterialTheme.colorScheme.primary
-        val scope = rememberCoroutineScope()
-        FloatingActionButton(
-            modifier =
+        Column(modifier = Modifier.align(Alignment.TopEnd)) {
+            val fabDisabledColor = MaterialTheme.colorScheme.surface
+            val fabEnabledColor = MaterialTheme.colorScheme.primary
+            val scope = rememberCoroutineScope()
+
+            var menuExpanded by remember { mutableStateOf(false) }
+
+            LongPressFab(
+                modifier =
                 Modifier.size(60.dp)
-                    .align(Alignment.TopEnd)
                     .padding(end = 20.dp, top = 20.dp)
                     .testTag("gyroFab"),
-            onClick = {
-                if (!data.gyroscopeMissing.value) {
-                    data.useGyroscope.value = !data.useGyroscope.value
-                } else {
-                    scope.launch {
-                        data.activity?.getString(R.string.no_gyro_error)?.let {
-                            data.snackBarHostState.showSnackbar(it)
+                onClick = {
+                    if (!data.gyroscopeMissing.value) {
+                        data.useGyroscope.value = !data.useGyroscope.value
+                    } else {
+                        scope.launch {
+                            data.activity?.getString(R.string.no_gyro_error)?.let {
+                                data.snackBarHostState.showSnackbar(it)
+                            }
                         }
                     }
+                },
+                onLongClick = {
+                    println("LOL Gyro Long Press")
+                    menuExpanded = true
                 }
-            }
-        ) {
-            Icon(
-                painterResource(id = R.mipmap.gyroscope_foreground),
-                "",
-                modifier =
+            ) {
+                Icon(
+                    painterResource(id = R.mipmap.gyroscope_foreground),
+                    "",
+                    modifier =
                     Modifier.fillMaxSize()
                         .background(
                             if (!data.gyroscopeMissing.value && data.useGyroscope.value)
                                 fabEnabledColor
                             else fabDisabledColor
                         )
-            )
+                )
+            }
+            DropdownMenu(expanded = menuExpanded, onDismissRequest = { }) {
+                ('A'..'Z').forEach {
+                    DropdownMenuItem(
+                        text = { Text(it.toString()) },
+                        onClick = {
+                            menuExpanded = false
+                            data.phone3DLetter.value = it
+                        }
+                    )
+                }
+            }
         }
     }
 }

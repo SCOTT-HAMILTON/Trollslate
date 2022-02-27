@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import java.util.*
 import org.scotthamilton.trollslate.R
 import org.scotthamilton.trollslate.utils.toUrlBase64
 

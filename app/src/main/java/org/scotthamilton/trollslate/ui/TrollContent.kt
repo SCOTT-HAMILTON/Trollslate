@@ -144,12 +144,13 @@ fun TrollContent(text: String = "DORIAN", angle: Float = 5f, activity: Activity?
                             angle = angle
                         )
                     }
+                    items(1) { Spacer(modifier = Modifier.fillMaxHeight().width(100.dp)) }
                 }
                 TrollShareFab(
                     modifier = Modifier.align(Alignment.TopEnd),
                     activity = activity,
                     text = text,
-                    angle = angle * 0.5f,
+                    angle = angle * 0.75f,
                 )
             }
         }

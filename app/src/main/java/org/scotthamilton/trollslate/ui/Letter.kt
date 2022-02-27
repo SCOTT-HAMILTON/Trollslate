@@ -9,7 +9,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -252,7 +251,6 @@ fun Letter(
     textColor: Color,
     strokeWidth: Float = 5f,
     angle: Float = 80f,
-    padding: Float = 5f,
     adaptiveStrokes: Boolean = true
 ) {
     val codon = FontData.lettersCodonTable[letter]
@@ -323,7 +321,7 @@ fun drawLettersToPdf(
     out: OutputStream
 ) {
     val padding = letter_size.height * 0.1f
-    val widthSpace = letter_size.width * 0.04f
+    val widthSpace = letter_size.width * 0.6f
     val canvasSize =
         Size(
             (letter_size.width + widthSpace) * letters.length.toFloat() + padding * 2f,

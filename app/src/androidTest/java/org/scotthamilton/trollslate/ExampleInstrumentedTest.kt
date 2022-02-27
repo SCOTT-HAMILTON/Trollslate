@@ -1,6 +1,9 @@
 package org.scotthamilton.trollslate
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -12,6 +15,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.scotthamilton.trollslate.ui.MainActivityContent
+import org.scotthamilton.trollslate.ui.TrollContent
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
 import tools.fastlane.screengrab.FileWritingScreenshotCallback
 import tools.fastlane.screengrab.Screengrab
@@ -40,19 +44,31 @@ class ExampleInstrumentedTest {
     @Test
     fun mainActivityScreenshots() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
-
         composeTestRule.setContent { TrollslateTheme { MainActivityContent() } }
         composeTestRule.onNodeWithTag("gyroFab").performClick()
-        composeTestRule.takeScreenShot("start")
-        composeTestRule.onNodeWithTag("trollTextInput").performTextInput("HELLO WORLD" * 5)
         composeTestRule.onNodeWithTag("phoneAngleScroller").performGesture {
-            swipeUp(startY = 10000f, endY = 0f)
+            swipeDown(startY = 0f, endY = 10000f)
         }
-        composeTestRule.onNodeWithTag("trollFab").performClick()
-        composeTestRule.waitForIdle()
-        //        composeTestRule.onNodeWithTag("trollActivityLazyRow").performScrollToIndex(12)
-        composeTestRule.takeScreenShot("end")
+        composeTestRule.onNodeWithTag("trollTextField").performTextInput(
+            "HELLO WORLD" * 5)
+        composeTestRule.takeScreenShot("start")
     }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun trollPageScreenshots() {
+        Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
+        composeTestRule.setContent {
+            TrollslateTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    TrollContent("HELLO WORLD" * 5, 10f)
+                }
+            }
+        }
+        composeTestRule.onNodeWithTag("trollActivityLazyRow").performScrollToIndex(12)
+        composeTestRule.takeScreenShot("troll")
+    }
+
 }
 
 // Thanks to

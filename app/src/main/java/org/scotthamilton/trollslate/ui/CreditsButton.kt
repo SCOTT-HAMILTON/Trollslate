@@ -32,8 +32,8 @@ fun CreditsButton(
         OutlinedButton(
             onClick = {
                 activity?.getString(R.string.credits_text)?.let {
-                    val text = it.trimIndent().replace(Regex("""\n*"""), " ").toUrlBase64()
-                    navController?.navigate(route = "troll?text=$text&angle=10.0")
+                    val text = it.trimIndent().toUrlBase64()
+                    navController?.navigate(route = "troll?text=$text&angle=5.0")
                 }
             },
             Modifier.padding(top = 10.dp, end = 10.dp).testTag("creditsButton"),

@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.dp
 import androidx.core.graphics.minus
 import java.io.OutputStream
 import kotlin.math.*
@@ -251,6 +253,7 @@ fun Letter(
     textColor: Color,
     strokeWidth: Float = 5f,
     angle: Float = 80f,
+    padding: Float = 5f,
     adaptiveStrokes: Boolean = true
 ) {
     val codon = FontData.lettersCodonTable[letter]

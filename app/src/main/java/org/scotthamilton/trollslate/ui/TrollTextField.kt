@@ -33,7 +33,7 @@ fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineS
     var text by remember { mutableStateOf(TextFieldValue("")) }
     val isAllowedChar = { c: Char -> c.isWhitespace() || c in FontData.lettersCodonTable.keys }
     TextField(
-        modifier = Modifier.width(300.dp).height(80.dp).testTag("trollTextInput"),
+        modifier = Modifier.width(300.dp).height(80.dp).testTag("trollTextField"),
         value = text,
         onValueChange = {
             text = it

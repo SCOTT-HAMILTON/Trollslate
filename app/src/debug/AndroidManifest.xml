@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="org.scotthamilton.trollslate">
+    xmlns:tools="http://schemas.android.com/tools">
 
 	<!-- Allows unlocking your device and activating its screen so UI tests can succeed -->
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
@@ -16,32 +15,5 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.DUMP"
         tools:ignore="ProtectedPermissions" />
-
-    <!--    format of the verisonCode is DDMMYY-->
-
-    <application
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Trollslate"
-        tools:targetApi="31">
-        <activity
-            android:name=".TrollActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Trollslate">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
 
 </manifest>

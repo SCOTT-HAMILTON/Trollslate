@@ -26,6 +26,7 @@ android {
             proguardFile(file("proguard-rules.pro"))
         }
     }
+    namespace = "org.scotthamilton.trollslate"
 }
 
 dependencies {

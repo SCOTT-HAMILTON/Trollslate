@@ -1,7 +1,6 @@
 package org.scotthamilton.trollslate.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -32,13 +31,14 @@ fun LongPressFab(
     content: @Composable () -> Unit,
 ) {
     Surface(
-        modifier = modifier.combinedClickable(
-            interactionSource = interactionSource,
-            indication = null,
-            role = Role.Button,
-            onClick = onClick,
-            onLongClick = onLongClick
-        ),
+        modifier =
+            modifier.combinedClickable(
+                interactionSource = interactionSource,
+                indication = null,
+                role = Role.Button,
+                onClick = onClick,
+                onLongClick = onLongClick
+            ),
         interactionSource = interactionSource,
         shape = shape,
         color = containerColor,
@@ -55,8 +55,8 @@ fun LongPressFab(
                 MaterialTheme.typography.labelLarge,
             ) {
                 Box(
-                    modifier = Modifier
-                        .defaultMinSize(
+                    modifier =
+                        Modifier.defaultMinSize(
                             minWidth = 56.0.dp,
                             minHeight = 56.0.dp,
                         ),

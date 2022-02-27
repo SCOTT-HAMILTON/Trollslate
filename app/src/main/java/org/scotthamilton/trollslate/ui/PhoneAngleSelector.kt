@@ -8,13 +8,13 @@ import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,27 +63,26 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
     var currentScrollOffset = ilerp(data.angleRange, scrollRange, data.currentAngle.value.toInt())
     Box(
         modifier =
-        Modifier
-            .height(200.dp)
-            .width(300.dp)
-            .background(
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                shape = RoundedCornerShape(20)
-            )
-            .scrollable(
-                orientation = Orientation.Vertical,
-                state =
-                rememberScrollableState { delta ->
-                    val newOffset = currentScrollOffset - delta
-                    if (scrollRange.first < newOffset && newOffset < scrollRange.last) {
-                        currentScrollOffset = newOffset
-                        data.currentAngle.value =
-                            ilerp(scrollRange, data.angleRange, currentScrollOffset.toInt())
-                    }
-                    delta
-                }
-            )
-            .testTag("phoneAngleScroller"),
+            Modifier.height(200.dp)
+                .width(300.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    shape = RoundedCornerShape(20)
+                )
+                .scrollable(
+                    orientation = Orientation.Vertical,
+                    state =
+                        rememberScrollableState { delta ->
+                            val newOffset = currentScrollOffset - delta
+                            if (scrollRange.first < newOffset && newOffset < scrollRange.last) {
+                                currentScrollOffset = newOffset
+                                data.currentAngle.value =
+                                    ilerp(scrollRange, data.angleRange, currentScrollOffset.toInt())
+                            }
+                            delta
+                        }
+                )
+                .testTag("phoneAngleScroller"),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -115,9 +114,7 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
 
             LongPressFab(
                 modifier =
-                Modifier.size(60.dp)
-                    .padding(end = 20.dp, top = 20.dp)
-                    .testTag("gyroFab"),
+                    Modifier.size(60.dp).padding(end = 20.dp, top = 20.dp).testTag("gyroFab"),
                 onClick = {
                     if (!data.gyroscopeMissing.value) {
                         data.useGyroscope.value = !data.useGyroscope.value
@@ -138,15 +135,15 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
                     painterResource(id = R.mipmap.gyroscope_foreground),
                     "",
                     modifier =
-                    Modifier.fillMaxSize()
-                        .background(
-                            if (!data.gyroscopeMissing.value && data.useGyroscope.value)
-                                fabEnabledColor
-                            else fabDisabledColor
-                        )
+                        Modifier.fillMaxSize()
+                            .background(
+                                if (!data.gyroscopeMissing.value && data.useGyroscope.value)
+                                    fabEnabledColor
+                                else fabDisabledColor
+                            )
                 )
             }
-            DropdownMenu(expanded = menuExpanded, onDismissRequest = { }) {
+            DropdownMenu(expanded = menuExpanded, onDismissRequest = {}) {
                 ('A'..'Z').forEach {
                     DropdownMenuItem(
                         text = { Text(it.toString()) },

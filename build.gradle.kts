@@ -2,20 +2,27 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven{
+            url = uri("${project.rootDir}/app/offline-repository")
+        }
+        maven{
+            url = uri("${project.rootDir}/offline-repository")
+        }
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.1.2")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("com.android.tools.build:gradle:7.2.0-beta02")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
+//        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 
-plugins {}
+plugins {
+    id("offline-dependencies")
+}
 
 allprojects {
     repositories {
         google()
         mavenCentral()
-        @Suppress("JcenterRepositoryObsolete") // Required by dokka plugin
-        jcenter()
     }
 }

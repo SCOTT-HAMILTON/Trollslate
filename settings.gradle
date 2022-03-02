@@ -1,2 +1,18 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven{
+            url = uri("./app/offline-repository")
+		}
+        maven{
+            url = uri("./offline-repository")
+        }
+    }
+	includeBuild("offlineRepoPlugin")
+	includeBuild("commonPlugin")
+}
 rootProject.name = "trollslate"
-include ':app'
+include(':app')
+

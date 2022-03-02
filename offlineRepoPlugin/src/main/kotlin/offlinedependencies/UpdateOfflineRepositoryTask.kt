@@ -30,9 +30,14 @@ import org.apache.maven.model.path.DefaultPathTranslator
 import org.apache.maven.model.validation.DefaultModelValidator
 import org.apache.maven.model.Model
 import org.apache.maven.model.building.ModelBuildingException
+import org.gradle.api.Plugin
+import org.gradle.api.artifacts.ResolvedArtifact
+import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.ivy.IvyDescriptorArtifact
 import org.gradle.ivy.IvyModule
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.maven
+import org.gradle.kotlin.dsl.plugins
 import org.jetbrains.kotlin.gradle.plugin.statistics.ReportStatisticsToElasticSearch.url
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -42,11 +47,6 @@ open class UpdateOfflineRepositoryTask : DefaultTask() {
     data class ArtifactComponent(val id: ModuleComponentIdentifier, val files: MutableSet<File>)
     @TaskAction
     fun run() {
-//        project.dependencies.create("org.gradle.kotlin:gradle-kotlin-dsl-plugins:2.1.7")
-            //		logger.info("Lol plugins=${project.plugins}")
-//        project.plugins.forEach { plugin ->
-//            logger.info("Lol plugin=$plugin")
-//        }
         offlineRepoDir = getOfflineRepoDir(project)
         withRepositoryFiles { components ->
             components.forEach { (id, files) ->
@@ -62,6 +62,7 @@ open class UpdateOfflineRepositoryTask : DefaultTask() {
             }
         }
     }
+
     private fun withRepositoryFiles(callback: (Map<ModuleComponentIdentifier, Set<File>>)->Unit) {
         val originalRepos = project.repositories.toList()
 //        project.logger.info("Original repos: `$originalRepos`")
@@ -84,8 +85,6 @@ open class UpdateOfflineRepositoryTask : DefaultTask() {
     private fun collectRepoFiles(configurations: Set<Configuration>):
             Map<ModuleComponentIdentifier, Set<File>> {
 //        logger.info("Lol given configurations=$configurations")
-
-        // collect artifact components
         val components = configurations.map { config ->
             config.allDependencies.map { dep ->
                 getImperativeDepsArtifacts().map {
@@ -116,10 +115,52 @@ open class UpdateOfflineRepositoryTask : DefaultTask() {
 
         return components
     }
+
+    data class SimpleComponentId(val group: String, val name: String, val version: String) {
+        fun toModuleCompId() : ModuleComponentIdentifier =
+            DefaultModuleComponentIdentifier.newId(
+                DefaultModuleIdentifier.newId(group, name),
+                version
+            )
+    }
+
     private fun collectPoms(components: MutableMap<ModuleComponentIdentifier, MutableSet<File>>) {
+        val imperativePomComponents = listOf<ModuleComponentIdentifier>(
+//            SimpleComponentId(
+//                "org.gradle.kotlin.kotlin-dsl",
+//                "org.gradle.kotlin.kotlin-dsl.gradle.plugin", "2.1.7").toModuleCompId(),
+//            SimpleComponentId(
+//                "com.google.code.gson",
+//                "gson", "2.8.6").toModuleCompId(),
+//            SimpleComponentId(
+//                "com.google.code.gson",
+//                "gson-parent", "2.8.6").toModuleCompId(),
+//            SimpleComponentId(
+//                "org.sonatype.oss",
+//                "oss-parent", "7"
+//            ).toModuleCompId(),
+//            SimpleComponentId(
+//                "com.google.guava",
+//                "guava", "29.0-jre"
+//            ).toModuleCompId(),
+//            SimpleComponentId(
+//                "com.google.guava",
+//                "guava-parent", "29.0-jre"
+//            ).toModuleCompId(),
+//            SimpleComponentId(
+//                "org.jetbrains.kotlinx",
+//                "kotlinx-coroutines-core", "1.5.0"
+//            ).toModuleCompId(),
+
+        )
         logger.trace("Collecting pom files")
+        components.keys.forEach {
+            logger.info("Component POM ID:$it")
+        }
         val mavenArtifacts = project.dependencies.createArtifactResolutionQuery()
-            .forComponents(components.keys)
+            .forComponents(
+                components.keys + imperativePomComponents
+            )
             .withArtifacts(MavenModule::class.java, MavenPomArtifact::class.java)
             .execute()
         val pomModelResolver = PomDependencyModelResolver(project)
@@ -142,6 +183,11 @@ open class UpdateOfflineRepositoryTask : DefaultTask() {
                     }
                 }
             }
+        }
+        logger.info("Pom component cache size=${pomModelResolver.componentCache.size}")
+        pomModelResolver.componentCache.forEach { (componentId, file) ->
+            logger.info("Pom Resolved componentId=$componentId")
+            components.addToMapList(componentId, file)
         }
     }
 
@@ -213,25 +259,38 @@ open class UpdateOfflineRepositoryTask : DefaultTask() {
     }
 
     private fun moduleDirectory(ci: ModuleComponentIdentifier) : File =
-        File("$offlineRepoDir",
+        File(
+            offlineRepoDir,
             "${ci.group.replace('.', '/')}/${ci.module}/${ci.version}")
 
-    private fun getImperativeDepsArtifacts() :  Set<ArtifactComponent> {
-        val imperativeDepsList = listOf(
-            "com.android.tools.build:gradle:7.2.0-beta02",
+    private fun getImperativeDepsArtifacts() : Set<ArtifactComponent> {
+        val imperativeDepsList = listOf<String>(
             "org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:2.1.7"
+//            "com.android.tools.build:gradle:7.2.0-beta02",
+//            "org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:2.1.7",
+//            "com.google.code.gson:gson:2.8.6",
+//            "com.google.code.gson:gson-parent:2.8.6",
+//            "org.sonatype.oss:oss-parent:7",
+//            "com.google.guava:guava:29.0-jre",
+//            "com.google.guava:guava-parent:29.0-jre",
+//            "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
         )
         project.repositories.gradlePluginPortal()
-//        project.repositories.maven("https://plugins.gradle.org/m2/")
+        project.repositories.mavenCentral()
+        project.repositories.maven("https://plugins.gradle.org/m2/")
         project.repositories.google()
-        return project.configurations.detachedConfiguration(
+        val artifacts = project.configurations.detachedConfiguration(
             *imperativeDepsList.map { project.dependencies.create(it) }.toTypedArray()
-        ).resolveToArtifacts()
+        ).resolveToAllRecurseArtifacts()
+        artifacts.forEach { artifact ->
+            logger.info("Imperative artifact: id=${artifact.id}, files=${artifact.files}")
+        }
+		return artifacts
     }
 
     private fun Dependency.artifactToComponents() : Set<ArtifactComponent> {
         return if (this is ExternalModuleDependency) {
-            project.configurations.detachedConfiguration(this).resolveToArtifacts()
+            project.configurations.detachedConfiguration(this).resolveToAllRecurseArtifacts()
         } else {
             setOf()
         }
@@ -257,16 +316,26 @@ open class UpdateOfflineRepositoryTask : DefaultTask() {
         }
     }
 
-    private fun Configuration.resolveToArtifacts() : Set<ArtifactComponent>  =
+    private fun ResolvedArtifact.toArtifactComponent(): ArtifactComponent {
+        val componentId = with(moduleVersion.id) {
+            DefaultModuleComponentIdentifier.newId(
+                DefaultModuleIdentifier.newId(group, name),
+                version
+            )
+        }
+        return ArtifactComponent(componentId, mutableSetOf(file))
+    }
+
+    private fun Configuration.resolveToAllRecurseArtifacts() : Set<ArtifactComponent> =
         resolvedConfiguration.resolvedArtifacts.map { artifact ->
-            val componentId = with(artifact.moduleVersion.id) {
-                DefaultModuleComponentIdentifier.newId(
-                    DefaultModuleIdentifier.newId(group, name),
-                    version
-                )
-            }
-            ArtifactComponent(componentId, mutableSetOf(artifact.file))
-        }.toSet()
+            artifact.toArtifactComponent()
+        }.toSet() +
+        resolvedConfiguration.firstLevelModuleDependencies.map {
+            it.allModuleArtifacts.map { artifact ->
+                artifact.toArtifactComponent()
+            }.toSet()
+        }.flatten().toSet()
 
 }
+
 

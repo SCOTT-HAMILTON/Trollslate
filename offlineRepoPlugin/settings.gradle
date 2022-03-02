@@ -1,0 +1,18 @@
+pluginManagement {
+//    resolutionStrategy {
+//        eachPlugin {
+//            logger.info("Plugin details: id=${it.getRequested().id}, version=${it.getRequested().version}, module=${it.getRequested().module}")
+//        }
+//    }
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven{
+            url = uri("./../app/offline-repository")
+		}
+        maven{
+            url = uri("./../offline-repository")
+        }
+    }
+}

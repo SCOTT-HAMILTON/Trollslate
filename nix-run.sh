@@ -11,7 +11,10 @@ export ANDROID_HOME=~/Android/Sdk/
 # ./gradlew wrapper --gradle-version 7.4
 # ./gradlew app:assembleDebug app:assembleAndroidTest
 # ./gradlew app:assembleDebug --stacktrace
+# ./gradlew updateOfflineRepositoryTask --info
+# ./gradlew --scan -q app:dependencies 
 ./gradlew updateOfflineRepositoryTask --info
+# ./gradlew :offlineRepoPlugin:pluginDescriptors --scan
 # ./gradlew app:assembleDebug
 # ./gradlew clean
 # ~/GIT/NixPkgs/result/bin/fastlane screengrab

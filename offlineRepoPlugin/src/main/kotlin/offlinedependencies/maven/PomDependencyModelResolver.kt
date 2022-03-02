@@ -18,7 +18,7 @@ import java.io.File
 
 class PomDependencyModelResolver(private val project: Project) : ModelResolver  {
     private val pomCache: MutableMap<String, FileModelSource> = mutableMapOf()
-    private val componentCache: MutableMap<ModuleComponentIdentifier, File> = mutableMapOf()
+    val componentCache: MutableMap<ModuleComponentIdentifier, File> = mutableMapOf()
     override fun resolveModel(
         groupId: String?,
         artifactId: String?,

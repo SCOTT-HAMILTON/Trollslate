@@ -9,12 +9,12 @@ version = "1.0"
 repositories {
     google()
     mavenCentral()
-	maven{
-		url = uri("${project.rootDir}/app/offline-repository")
-	}
-	maven{
-		url = uri("${project.rootDir}/offline-repository")
-	}
+    maven{
+        url = uri("./../app/offline-repository")
+    }
+    maven{
+        url = uri("./../offline-repository")
+    }
 }
 
 dependencies {
@@ -39,11 +39,11 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-		maven{
-			url = uri("${project.rootDir}/app/offline-repository")
-		}
-		maven{
-			url = uri("${project.rootDir}/offline-repository")
-		}
+        maven{
+            url = uri("./../app/offline-repository")
+        }
+        maven{
+            url = uri("./../offline-repository")
+        }
     }
 }

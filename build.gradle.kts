@@ -3,10 +3,10 @@ buildscript {
         google()
         mavenCentral()
         maven{
-            url = uri("${project.rootDir}/app/offline-repository")
+            url = uri("./app/offline-repository")
         }
         maven{
-            url = uri("${project.rootDir}/offline-repository")
+            url = uri("./offline-repository")
         }
     }
     dependencies {
@@ -24,5 +24,11 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven{
+            url = uri("./app/offline-repository")
+        }
+        maven{
+            url = uri("./offline-repository")
+        }
     }
 }

@@ -264,16 +264,14 @@ open class UpdateOfflineRepositoryTask : DefaultTask() {
             "${ci.group.replace('.', '/')}/${ci.module}/${ci.version}")
 
     private fun getImperativeDepsArtifacts() : Set<ArtifactComponent> {
-        val imperativeDepsList = listOf<String>(
-            "org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:2.1.7"
-//            "com.android.tools.build:gradle:7.2.0-beta02",
-//            "org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:2.1.7",
-//            "com.google.code.gson:gson:2.8.6",
-//            "com.google.code.gson:gson-parent:2.8.6",
-//            "org.sonatype.oss:oss-parent:7",
-//            "com.google.guava:guava:29.0-jre",
-//            "com.google.guava:guava-parent:29.0-jre",
-//            "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
+        val imperativeDepsList = listOf(
+            // internals
+            "org.gradle.kotlin.kotlin-dsl:org.gradle.kotlin.kotlin-dsl.gradle.plugin:2.1.7",
+            "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.5.31",
+            "org.apache.maven:maven-model-builder:3.8.4",
+
+            // externals
+            "com.android.tools.build:gradle:7.2.0-beta02"
         )
         project.repositories.gradlePluginPortal()
         project.repositories.mavenCentral()

@@ -15,4 +15,13 @@ pluginManagement {
 }
 rootProject.name = "trollslate"
 include(':app')
-
+dependencyResolutionManagement {
+    repositories {
+        maven{
+            url = uri("./app/offline-repository")
+        }
+        maven{
+            url = uri("./offline-repository")
+        }
+    }
+}

@@ -86,6 +86,7 @@ open class UpdateOfflineRepositoryTask : DefaultTask() {
             Map<ModuleComponentIdentifier, Set<File>> {
 //        logger.info("Lol given configurations=$configurations")
         val components = configurations.map { config ->
+            println("Config=${config.name}")
             config.allDependencies.map { dep ->
                 getImperativeDepsArtifacts().map {
                     it.id to it.files

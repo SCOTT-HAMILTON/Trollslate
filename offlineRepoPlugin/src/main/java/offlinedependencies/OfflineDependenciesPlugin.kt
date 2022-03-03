@@ -23,7 +23,6 @@ class OfflineDependenciesPlugin : Plugin<Project> {
             target.serviceOf(),
             target.serviceOf()
         )
-
         target.extensions.create(EXTENSION_NAME, OfflineDependenciesExtension::class.java, repoHandler)
         target.logger.info("Offline dependencies root configured at $offlineRepoRootDir")
         target.tasks.create(TASK_NAME, UpdateOfflineRepositoryTask::class.java)

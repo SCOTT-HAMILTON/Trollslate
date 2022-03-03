@@ -1,7 +1,7 @@
 plugins {
+    id("offline-dependencies")
     id("com.android.application")
     id("common-config")
-    id("offline-dependencies")
 }
 
 android {

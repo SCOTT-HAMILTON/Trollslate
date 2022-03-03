@@ -13,7 +13,8 @@ export ANDROID_HOME=~/Android/Sdk/
 # ./gradlew app:assembleDebug --stacktrace
 # ./gradlew updateOfflineRepositoryTask --info
 # ./gradlew --scan -q app:dependencies 
-./gradlew updateOfflineRepositoryTask --info
+./gradlew updateOfflineRepositoryTask
+# ./gradlew --offline :classpath
 # ./gradlew :offlineRepoPlugin:pluginDescriptors --scan
 # ./gradlew app:assembleDebug
 # ./gradlew clean

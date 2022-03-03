@@ -1,6 +1,7 @@
 plugins {
-    `java-gradle-plugin`
+    id("java-gradle-plugin")
     `kotlin-dsl`
+//    id("org.jetbrains.kotlin.android") version "1.5.31"
     id("offline-dependencies")
 }
 
@@ -10,9 +11,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly(gradleApi())
+    implementation(gradleApi())
 
-    implementation("com.android.tools.build:gradle:7.2.0-beta02")
+    compileOnly("com.android.tools.build:gradle:7.2.0-beta02")
+    compileOnly("com.android.tools.build:gradle-api:7.2.0-beta02")
+    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
     implementation(kotlin("gradle-plugin", "1.5.31"))
     implementation(kotlin("android-extensions"))
 }

@@ -1,27 +1,36 @@
 pluginManagement {
     repositories {
+        maven{
+            url = uri("${rootProject.getProjectDir().path}/app/offline-repository")
+        }
+        maven{
+            url = uri("${rootProject.getProjectDir().path}/offline-repository")
+        }
         gradlePluginPortal()
         google()
         mavenCentral()
-        maven{
-            url = uri("./app/offline-repository")
-		}
-        maven{
-            url = uri("./offline-repository")
-        }
     }
 	includeBuild("offlineRepoPlugin")
 	includeBuild("commonPlugin")
 }
-rootProject.name = "trollslate"
-include(':app')
-dependencyResolutionManagement {
-    repositories {
-        maven{
-            url = uri("./app/offline-repository")
-        }
-        maven{
-            url = uri("./offline-repository")
-        }
+plugins {
+    id("com.gradle.enterprise") version("3.8.1")
+}
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
     }
 }
+rootProject.name = "trollslate"
+include(':app')
+//dependencyResolutionManagement {
+//    repositories {
+//        maven{
+//            url = uri("${rootProject.getProjectDir().path}/app/offline-repository")
+//        }
+//        maven{
+//            url = uri("${rootProject.getProjectDir().path}/offline-repository")
+//        }
+//    }
+//}

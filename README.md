@@ -12,6 +12,10 @@ Dark theme is enforced but the barcode-text-page is in light theme for contrast 
 Please consider increasing the screen's brightness if you don't see anything.
 Some screens work better than others but it should work fine on yours regardless.
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.scotthamilton.trollslate/)
+
 ## Screens
 ![Demo](https://user-images.githubusercontent.com/24496705/155399458-58716f80-02a0-431c-9125-8aca085e0d35.gif)
 

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name" translatable="false">Trollslate</string>
+    <string name="credits_text">
+        APLIKASI INI DIKEMBANGKAN OLEH SCOTT HAMILTON DENGAN BANTUAN DARI MARC DESSEVRE
+        TERIMA KASIH UNTUK FREEPIK ATAS IKON GIROSKOP MEREKA
+        APLIKASI INI DITENAGAI OLEH JETPACK COMPOSE
+    </string>
+    <string name="credits">kredit</string>
+    <string name="troll_text">Teks usil</string>
+    <string name="your_text">Teks kamu</string>
+    <string name="no_gyro_error">
+        Tidak bisa mengakses giroskop, fungsinya tidak akan tersedia
+    </string>
+    <string name="intent_pdf_share_subject">Teks Trollslate, coba untuk mengira apa yang tertulis!</string>
+</resources>

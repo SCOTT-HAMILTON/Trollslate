@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.scotthamilton.trollslate.R
+import org.scotthamilton.trollslate.data.FontData
 
 data class PhoneAngleSelectorData(
     val angleRange: IntRange,
@@ -144,7 +145,7 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
                 )
             }
             DropdownMenu(expanded = menuExpanded, onDismissRequest = {}) {
-                ('A'..'Z').forEach {
+                (FontData.lettersCodonTable.keys).forEach {
                     DropdownMenuItem(
                         text = { Text(it.toString()) },
                         onClick = {

@@ -11,11 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.scotthamilton.trollslate.data.FontData
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun LettersSlide() {
-    val letters = 'A'..'Z'
+    val letters = FontData.lettersCodonTable.keys
     Box(
         modifier =
             Modifier.height(150.dp)

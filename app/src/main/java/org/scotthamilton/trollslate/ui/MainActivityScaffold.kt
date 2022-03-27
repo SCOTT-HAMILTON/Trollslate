@@ -21,7 +21,9 @@ import org.scotthamilton.trollslate.utils.rotationVectorToRollAngle
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainActivityScaffold(navController: NavController?, activity: Activity?) {
+fun MainActivityScaffold(navController: NavController?,
+                         activity: Activity?,
+                         colorScheme: ColorScheme) {
     val sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
     val rotationSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
     val snackBarHostState = remember { SnackbarHostState() }
@@ -52,7 +54,7 @@ fun MainActivityScaffold(navController: NavController?, activity: Activity?) {
             SensorManager.SENSOR_DELAY_UI
         )
     }
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+    Surface(modifier = Modifier.fillMaxSize(), color = colorScheme.background) {
         Scaffold(
             snackbarHost = {
                 SnackbarHost(
@@ -60,8 +62,8 @@ fun MainActivityScaffold(navController: NavController?, activity: Activity?) {
                     snackbar = {
                         Snackbar(
                             snackbarData = it,
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            containerColor = colorScheme.surfaceVariant,
+                            contentColor = colorScheme.onSurfaceVariant
                         )
                     }
                 )
@@ -72,6 +74,7 @@ fun MainActivityScaffold(navController: NavController?, activity: Activity?) {
                     phoneAngleSelectorData = phoneAngleSelectorData,
                     trollTextFieldData = trollTextFieldData,
                     navController = navController,
+                    colorScheme = colorScheme,
                     activity = activity
                 )
             }

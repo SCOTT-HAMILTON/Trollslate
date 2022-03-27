@@ -11,10 +11,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Share
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +37,7 @@ private fun TrollShareFab(
     modifier: Modifier = Modifier,
     text: String,
     angle: Float,
+    colorScheme: ColorScheme
 ) {
     val letterSize = angleToLetterSize(angle)
     val strokeWidth = letterSizeToStokeWidth(letterSize)
@@ -91,7 +89,7 @@ private fun TrollShareFab(
             "",
             modifier =
                 Modifier.fillMaxSize()
-                    .background(MaterialTheme.colorScheme.onPrimary)
+                    .background(colorScheme.onPrimary)
                     .padding(end = 5.dp)
         )
     }
@@ -117,7 +115,8 @@ private fun letterSizeToStokeWidth(letterSize: Size): Float = letterSize.width *
 @Composable
 fun TrollContent(text: String = "DORIAN",
                  angle: Float = 5f,
-                 activity: Activity? = null) {
+                 activity: Activity? = null,
+                 colorScheme: ColorScheme = MaterialTheme.colorScheme) {
     val letterSize = angleToLetterSize(angle)
     val strokeWidth = letterSizeToStokeWidth(letterSize)
     TrollslateTheme {
@@ -153,6 +152,7 @@ fun TrollContent(text: String = "DORIAN",
                     activity = activity,
                     text = text,
                     angle = angle * 0.75f,
+                    colorScheme = colorScheme
                 )
             }
         }

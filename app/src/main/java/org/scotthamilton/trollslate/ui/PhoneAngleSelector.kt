@@ -9,12 +9,7 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,7 +54,7 @@ private fun ilerp(from: IntRange, to: IntRange, value: Int) =
 @RequiresApi(value = 26)
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
+fun PhoneAngleSelector(data: PhoneAngleSelectorData, colorScheme: ColorScheme) {
     val scrollRange = IntRange(-1000, 1000)
     var currentScrollOffset = ilerp(data.angleRange, scrollRange, data.currentAngle.value.toInt())
     Box(
@@ -67,7 +62,7 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
             Modifier.height(200.dp)
                 .width(300.dp)
                 .background(
-                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    color = colorScheme.secondaryContainer,
                     shape = RoundedCornerShape(20)
                 )
                 .scrollable(
@@ -100,15 +95,16 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
             Spacer(modifier = Modifier.fillMaxWidth().height(40.dp))
             Canvas3DPhone(
                 modifier = Modifier.size(120.dp, 60.dp).padding(start = 10.dp),
-                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+                backgroundColor = colorScheme.secondaryContainer,
                 angle = data.currentAngle.value,
-                letter = data.phone3DLetter.value
+                letter = data.phone3DLetter.value,
+                colorScheme = colorScheme
             )
         }
 
         Column(modifier = Modifier.align(Alignment.TopEnd)) {
-            val fabDisabledColor = MaterialTheme.colorScheme.surface
-            val fabEnabledColor = MaterialTheme.colorScheme.primary
+            val fabDisabledColor = colorScheme.surface
+            val fabEnabledColor = colorScheme.primary
             val scope = rememberCoroutineScope()
 
             var menuExpanded by remember { mutableStateOf(false) }
@@ -130,7 +126,8 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData) {
                 onLongClick = {
                     println("LOL Gyro Long Press")
                     menuExpanded = true
-                }
+                },
+                colorScheme = colorScheme
             ) {
                 Icon(
                     painterResource(id = R.mipmap.gyroscope_foreground),

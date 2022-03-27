@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import org.scotthamilton.trollslate.ui.*
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
+import org.scotthamilton.trollslate.ui.theme.trollslateColorScheme
 import org.scotthamilton.trollslate.utils.decodeUrlBase64
 import org.scotthamilton.trollslate.utils.toUrlBase64
 import java.util.concurrent.atomic.AtomicBoolean
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TrollslateTheme {
+                val trollColorScheme = trollslateColorScheme()
                 navController = rememberNavController()
                 navController?.let { navController ->
                     NavHost(navController = navController, startDestination = "main") {
@@ -38,7 +40,8 @@ class MainActivity : ComponentActivity() {
                             currentPage.set(NavPage.Main.ordinal)
                             MainActivityScaffold(
                                 navController,
-                                this@MainActivity
+                                this@MainActivity,
+                                trollColorScheme,
                             )
                         }
                         composable(
@@ -56,7 +59,8 @@ class MainActivity : ComponentActivity() {
                             TrollContent(
                                 text ?: "INVALID",
                                 it.arguments?.getFloat("angle") ?: 45f,
-                                this@MainActivity
+                                this@MainActivity,
+                                colorScheme = trollColorScheme
                             )
                         }
                     }

@@ -6,7 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -82,7 +82,9 @@ private fun visualTransformAnnotate(text: String) : AnnotatedString {
 }
 
 @Composable
-fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineScope) -> Unit) {
+fun TrollTextField(colorScheme: ColorScheme,
+                   data: TrollTextFieldData,
+                   onValueChanged: suspend (CoroutineScope) -> Unit) {
     val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf(TextFieldValue("")) }
     val isAllowedChar = { c: Char -> c.isWhitespace() || c in FontData.lettersCodonTable.keys }
@@ -115,7 +117,7 @@ fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineS
             )
         },
         colors =
-        TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colorScheme.primary),
+        TextFieldDefaults.textFieldColors(backgroundColor = colorScheme.primary),
         shape = RoundedCornerShape(20),
         textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)
     )

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Check
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,7 @@ import org.scotthamilton.trollslate.utils.toUrlBase64
 @Composable
 fun TrollFab(
     modifier: Modifier = Modifier,
+    colorScheme: ColorScheme = MaterialTheme.colorScheme,
     trollTextFieldData: TrollTextFieldData,
     phoneAngleSelectorData: PhoneAngleSelectorData,
     navController: NavController? = null,
@@ -63,8 +65,8 @@ fun TrollFab(
                     Modifier.fillMaxSize()
                         .background(
                             if (!trollTextFieldData.showError.value)
-                                MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.surfaceVariant
+                                colorScheme.primary
+                            else colorScheme.surfaceVariant
                         )
             )
         }

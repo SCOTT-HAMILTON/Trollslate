@@ -8,6 +8,7 @@ import android.util.SizeF
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -104,8 +105,9 @@ fun modern3DPhonePath(phoneDims: SizeF, letter: Char): Path {
 @Composable
 fun Canvas3DPhone(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colorScheme.background,
-    onBackgroundColor: Color = MaterialTheme.colorScheme.onBackground,
+    colorScheme: ColorScheme = MaterialTheme.colorScheme,
+    backgroundColor: Color = colorScheme.background,
+    onBackgroundColor: Color = colorScheme.onBackground,
     angle: Float,
     letter: Char
 ) {

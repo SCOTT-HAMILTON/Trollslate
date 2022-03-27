@@ -17,6 +17,7 @@ import org.junit.runner.RunWith
 import org.scotthamilton.trollslate.ui.MainActivityContent
 import org.scotthamilton.trollslate.ui.TrollContent
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
+import org.scotthamilton.trollslate.ui.theme.trollslateColorScheme
 import tools.fastlane.screengrab.FileWritingScreenshotCallback
 import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
@@ -59,7 +60,10 @@ class ExampleInstrumentedTest {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
         composeTestRule.setContent {
             TrollslateTheme {
-                Surface(modifier = Modifier.fillMaxSize()) { TrollContent("HELLO WORLD" * 5, 10f) }
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    TrollContent("HELLO WORLD" * 5, 10f,
+                        colorScheme = trollslateColorScheme())
+                }
             }
         }
         composeTestRule.onNodeWithTag("trollActivityLazyRow").performScrollToIndex(12)

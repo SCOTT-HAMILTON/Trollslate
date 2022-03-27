@@ -32,7 +32,7 @@ fun CreditsButton(
             onClick = {
                 activity?.getString(R.string.credits_text)?.let {
                     val text = it.trimIndent().toUrlBase64()
-                    navController?.navigate(route = "troll?text=$text&angle=5.0")
+                    navController?.navigate(route = "troll?text=$text&angle=5.0&navbackable=true")
                 }
             },
             Modifier.padding(top = 10.dp, end = 10.dp).testTag("creditsButton"),

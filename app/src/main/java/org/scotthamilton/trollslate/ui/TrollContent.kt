@@ -115,7 +115,9 @@ private fun letterSizeToStokeWidth(letterSize: Size): Float = letterSize.width *
 @RequiresApi(Build.VERSION_CODES.N)
 @Preview(showBackground = true)
 @Composable
-fun TrollContent(text: String = "DORIAN", angle: Float = 5f, activity: Activity? = null) {
+fun TrollContent(text: String = "DORIAN",
+                 angle: Float = 5f,
+                 activity: Activity? = null) {
     val letterSize = angleToLetterSize(angle)
     val strokeWidth = letterSizeToStokeWidth(letterSize)
     TrollslateTheme {

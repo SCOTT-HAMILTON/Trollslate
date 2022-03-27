@@ -16,7 +16,8 @@ import org.scotthamilton.trollslate.data.FontData
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun LettersSlide() {
-    val letters = FontData.lettersCodonTable.keys
+    // drop the space character
+    val letters = FontData.lettersCodonTable.keys.drop(1)
     Box(
         modifier =
             Modifier.height(150.dp)

@@ -31,31 +31,20 @@ fun MainActivityContent(
         Surface(
             modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxHeight()
-            ) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 val creditState = remember {
                     MutableTransitionState(true).apply { targetState = true }
                 }
                 val trollFabState = remember {
                     MutableTransitionState(false).apply { targetState = false }
                 }
-                Box(modifier = Modifier.align(Alignment.End)) {
-                    TrollFab(
-                        trollTextFieldData = trollTextFieldData,
-                        phoneAngleSelectorData = phoneAngleSelectorData,
-                        navController = navController,
-                        state = trollFabState,
-                    )
-                    CreditsButton(creditState, navController, activity)
-                }
-                Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxSize().padding(bottom = 20.dp)
+                    modifier = Modifier.fillMaxHeight().align(Alignment.Center)
+                        .padding(bottom = 20.dp)
                 ) {
+                    Spacer(modifier = Modifier.fillMaxWidth().height(25.dp))
                     LettersSlide()
                     TrollTextField(trollTextFieldData) {
                         withContext(Dispatchers.Main) {
@@ -64,6 +53,15 @@ fun MainActivityContent(
                         }
                     }
                     PhoneAngleSelector(phoneAngleSelectorData)
+                }
+                Box(modifier = Modifier.align(Alignment.TopEnd)) {
+                    TrollFab(
+                        trollTextFieldData = trollTextFieldData,
+                        phoneAngleSelectorData = phoneAngleSelectorData,
+                        navController = navController,
+                        state = trollFabState,
+                    )
+                    CreditsButton(creditState, navController, activity)
                 }
             }
         }

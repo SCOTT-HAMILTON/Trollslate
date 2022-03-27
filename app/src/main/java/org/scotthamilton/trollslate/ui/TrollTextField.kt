@@ -2,6 +2,7 @@ package org.scotthamilton.trollslate.ui
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -23,9 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.scotthamilton.trollslate.data.FontData
-import org.scotthamilton.trollslate.utils.TypedRange
-import org.scotthamilton.trollslate.utils.groupRange
-import org.scotthamilton.trollslate.utils.indivRange
 
 data class TrollTextFieldData(var text: MutableState<String>, val showError: MutableState<Boolean>)
 
@@ -40,7 +38,7 @@ private fun visualTransformAnnotate(text: String) : AnnotatedString {
             index to c
         }.filter {
             it.second !in FontData.lettersCodonTable.keys
-        }.fold(listOf<Pair<Int, Int>>()) { a, c ->
+        }.fold(listOf()) { a, c ->
             if (a.isEmpty()) {
                 listOf(c.first to c.first)
             } else {
@@ -89,7 +87,7 @@ fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineS
     var text by remember { mutableStateOf(TextFieldValue("")) }
     val isAllowedChar = { c: Char -> c.isWhitespace() || c in FontData.lettersCodonTable.keys }
     TextField(
-        modifier = Modifier.width(300.dp).height(80.dp).testTag("trollTextField"),
+        modifier = Modifier.width(300.dp).height(160.dp).testTag("trollTextField"),
         value = text,
         onValueChange = {
             text = it
@@ -118,6 +116,7 @@ fun TrollTextField(data: TrollTextFieldData, onValueChanged: suspend (CoroutineS
         },
         colors =
         TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colorScheme.primary),
+        shape = RoundedCornerShape(20),
         textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)
     )
 }

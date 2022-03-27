@@ -29,6 +29,7 @@ This project is configured with Android Studio, it builds with gradle
  - French 100%
  - English 100%
  - German 100%
+ - Indonesian 100% (thanks to @the7thNightmare)
 
 The app is very little, it shouldn't take you more than 10 minutes
 to add translations to your native language. There are two ways to do so.

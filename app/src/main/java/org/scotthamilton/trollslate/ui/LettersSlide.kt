@@ -37,6 +37,9 @@ fun LettersSlide(colorScheme: ColorScheme) {
             horizontalArrangement = Arrangement.spacedBy(30.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            items(1) {
+                Spacer(modifier = Modifier.fillMaxHeight().width(5.dp))
+            }
             items(letters.count()) { index ->
                 Letter(
                     modifier =

@@ -147,7 +147,10 @@ fun TrollTextField(colorScheme: ColorScheme,
                 disabledLabelColor = colorScheme.outline,
                 errorLabelColor = colorScheme.onError,
                 cursorColor = colorScheme.outline,
-                errorCursorColor = colorScheme.onError
+                errorCursorColor = colorScheme.onError,
+
+                placeholderColor = colorScheme.outline,
+                disabledPlaceholderColor = colorScheme.outline,
             ),
         shape = RoundedCornerShape(20),
         textStyle = TextStyle(

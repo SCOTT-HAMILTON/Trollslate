@@ -1,36 +1,56 @@
 package org.scotthamilton.trollslate.ui
 
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.ZeroCornerSize
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.takeOrElse
+import androidx.compose.ui.layout.*
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.error
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.lerp
+import androidx.compose.ui.unit.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.scotthamilton.trollslate.R
 import org.scotthamilton.trollslate.data.FontData
+import kotlin.math.max
 
 data class TrollTextFieldData(var text: MutableState<String>, val showError: MutableState<Boolean>)
 
 fun defaultTrollTextFieldData(): TrollTextFieldData =
     TrollTextFieldData(text = mutableStateOf(""), showError = mutableStateOf(true))
 
-private fun visualTransformAnnotate(text: String) : AnnotatedString {
+private fun visualTransformAnnotate(colorScheme: ColorScheme, text: String) : AnnotatedString {
     val utext = text.uppercase()
     val badRanges =
         listOf(-1 to -1) +
@@ -72,7 +92,7 @@ private fun visualTransformAnnotate(text: String) : AnnotatedString {
         var isBad = badRanges.size >= 2 && badRanges[1].first == 0
         ranges.forEach {
             pushStyle(
-                SpanStyle(color = if (isBad) Color.Red else Color.Black)
+                SpanStyle(color = if (isBad) colorScheme.onError else colorScheme.onSurface)
             )
             append(utext.slice(IntRange(it.first, it.second)))
             pop()
@@ -88,7 +108,7 @@ fun TrollTextField(colorScheme: ColorScheme,
     val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf(TextFieldValue("")) }
     val isAllowedChar = { c: Char -> c.isWhitespace() || c in FontData.lettersCodonTable.keys }
-    TextField(
+    OutlinedTextField(
         modifier = Modifier.width(300.dp).height(160.dp).testTag("trollTextField"),
         value = text,
         onValueChange = {
@@ -99,7 +119,7 @@ fun TrollTextField(colorScheme: ColorScheme,
         },
         visualTransformation = { annotatedString ->
             TransformedText(
-                visualTransformAnnotate(annotatedString.text),
+                visualTransformAnnotate(colorScheme, annotatedString.text),
                 OffsetMapping.Identity
             )
         },
@@ -117,8 +137,20 @@ fun TrollTextField(colorScheme: ColorScheme,
             )
         },
         colors =
-        TextFieldDefaults.textFieldColors(backgroundColor = colorScheme.primary),
+            TextFieldDefaults.textFieldColors(
+//                backgroundColor = colorScheme.primary,
+                focusedIndicatorColor = colorScheme.onSurface,
+                errorIndicatorColor = colorScheme.onSurface,
+
+                focusedLabelColor = colorScheme.outline,
+                unfocusedLabelColor = colorScheme.outline,
+                disabledLabelColor = colorScheme.outline,
+                errorLabelColor = colorScheme.onError,
+                cursorColor = colorScheme.outline,
+                errorCursorColor = colorScheme.onError
+            ),
         shape = RoundedCornerShape(20),
-        textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 30.sp)
+        textStyle = TextStyle(
+            fontWeight = FontWeight.Bold, fontSize = 30.sp, color = colorScheme.onSurface)
     )
 }

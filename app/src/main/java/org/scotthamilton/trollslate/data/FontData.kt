@@ -84,6 +84,8 @@ class FontData {
                 ',' to "KAT",
                 '(' to "XAHX",
                 '[' to "XAHX",
+                ')' to "KAHK",
+                ']' to "KAHK",
             )
     }
 }

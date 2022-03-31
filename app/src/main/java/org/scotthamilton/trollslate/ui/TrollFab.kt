@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import org.scotthamilton.trollslate.ui.theme.OutlinedFloatingActionButton
 import org.scotthamilton.trollslate.utils.toUrlBase64
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -49,7 +50,7 @@ fun TrollFab(
             )
     ) {
         OutlinedFloatingActionButton(
-            colorScheme = colorScheme,
+            color = colorScheme.onSurface,
             onClick = {
                 if (!trollTextFieldData.showError.value) {
                     val text = trollTextFieldData.text.value.toUrlBase64()
@@ -71,53 +72,9 @@ fun TrollFab(
                 "",
                 modifier =
                     Modifier.fillMaxSize(0.5f)
-                        .background(Color.Transparent, shape = RectangleShape),
+                        .background(Color.Transparent),
                 tint = colorScheme.onSecondaryContainer
             )
-        }
-    }
-}
-
-@Composable
-fun OutlinedFloatingActionButton(
-    colorScheme: ColorScheme,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    shape: Shape = RoundedCornerShape(16.0.dp),
-    elevation: FloatingActionButtonElevation = FloatingActionButtonDefaults.elevation(),
-    content: @Composable () -> Unit,
-) {
-    Surface(
-        modifier = modifier
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                role = Role.Button,
-                onClick = onClick
-            )
-            .border(BorderStroke(2.dp, colorScheme.onSurface), shape = shape)
-            .background(Color.Transparent),
-        interactionSource = interactionSource,
-        shape = shape,
-        color = Color.Transparent,
-        contentColor = Color.Transparent,
-        tonalElevation = elevation.tonalElevation(interactionSource = interactionSource).value,
-        // no shadow elevation otherwise the content is not transparent
-    ) {
-        CompositionLocalProvider(LocalContentColor provides Color.Transparent) {
-            ProvideTextStyle(
-                MaterialTheme.typography.labelLarge,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .defaultMinSize(
-                            minWidth = 56.dp,
-                            minHeight = 56.dp,
-                        ).background(Color.Transparent),
-                    contentAlignment = Alignment.Center,
-                ) { content() }
-            }
         }
     }
 }

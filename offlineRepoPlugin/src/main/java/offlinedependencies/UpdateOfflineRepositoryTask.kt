@@ -81,7 +81,6 @@ open class UpdateOfflineRepositoryTask : DefaultTask() {
 //        project.logger.info("Lol repos 3: `${project.repositories.toList()}`")
         project.repositories.addAll(originalRepos)
 //        project.logger.info("Lol repos 4: `${project.repositories.toList()}`")
-        println("Lol files $files")
         callback(files)
     }
     private fun getConfigurations() : Set<Configuration> =

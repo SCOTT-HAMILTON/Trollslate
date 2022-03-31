@@ -28,6 +28,7 @@ import java.io.IOException
 import kotlin.math.PI
 import kotlin.math.sin
 import org.scotthamilton.trollslate.R
+import org.scotthamilton.trollslate.ui.theme.OutlinedFloatingActionButton
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -41,7 +42,8 @@ private fun TrollShareFab(
 ) {
     val letterSize = angleToLetterSize(angle)
     val strokeWidth = letterSizeToStokeWidth(letterSize)
-    FloatingActionButton(
+    OutlinedFloatingActionButton(
+        color = Color.Black,
         onClick = {
             activity?.let { activity ->
                 // Thanks to
@@ -88,9 +90,9 @@ private fun TrollShareFab(
             imageVector = Icons.Sharp.Share,
             "",
             modifier =
-                Modifier.fillMaxSize()
-                    .background(colorScheme.onPrimary)
-                    .padding(end = 5.dp)
+                Modifier.fillMaxSize(0.5f)
+                    .background(Color.Transparent),
+            tint = Color.Black
         )
     }
 }

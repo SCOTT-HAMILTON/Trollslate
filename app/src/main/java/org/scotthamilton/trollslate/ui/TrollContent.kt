@@ -30,6 +30,7 @@ import kotlin.math.sin
 import org.scotthamilton.trollslate.R
 import org.scotthamilton.trollslate.ui.theme.OutlinedFloatingActionButton
 import org.scotthamilton.trollslate.ui.theme.TrollslateTheme
+import org.scotthamilton.trollslate.ui.theme.md_theme_light_secondary
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
@@ -43,7 +44,7 @@ private fun TrollShareFab(
     val letterSize = angleToLetterSize(angle)
     val strokeWidth = letterSizeToStokeWidth(letterSize)
     OutlinedFloatingActionButton(
-        color = Color.Black,
+        color = md_theme_light_secondary,
         onClick = {
             activity?.let { activity ->
                 // Thanks to
@@ -92,7 +93,7 @@ private fun TrollShareFab(
             modifier =
                 Modifier.fillMaxSize(0.5f)
                     .background(Color.Transparent),
-            tint = Color.Black
+            tint = md_theme_light_secondary
         )
     }
 }

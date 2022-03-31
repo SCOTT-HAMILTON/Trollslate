@@ -209,7 +209,7 @@ private fun drawPcLine(start_cur_pos_pc: Point, newPos: Point, drawData: DrawDat
         val length = (e - s).length()
 
         val stroke =
-            flerp(FloatRange(0f, 100f), FloatRange(1f / angleSin, 2.5f / angleSin), midY) *
+            flerp(FloatRange(0f, 100f), FloatRange(1f / angleSin, 3f / angleSin), midY) *
                 drawData.strokeWidth
 
         val y =

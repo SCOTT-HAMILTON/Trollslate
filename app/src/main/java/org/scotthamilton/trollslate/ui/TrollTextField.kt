@@ -9,7 +9,6 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -30,26 +29,26 @@ data class TrollTextFieldData(var text: MutableState<String>, val showError: Mut
 fun defaultTrollTextFieldData(): TrollTextFieldData =
     TrollTextFieldData(text = mutableStateOf(""), showError = mutableStateOf(true))
 
-private fun visualTransformAnnotate(colorScheme: ColorScheme, text: String) : AnnotatedString {
+private fun visualTransformAnnotate(colorScheme: ColorScheme, text: String): AnnotatedString {
     val utext = text.uppercase()
     val badRanges =
         listOf(-1 to -1) +
-        utext.mapIndexed { index, c ->
-            index to c
-        }.filter {
-            it.second !in FontData.lettersCodonTable.keys
-        }.fold(listOf()) { a, c ->
-            if (a.isEmpty()) {
-                listOf(c.first to c.first)
-            } else {
-                val last = a.last()
-                if (c.first - 1 == last.second) {
-                    a.dropLast(1) + listOf(last.copy(second = c.first))
-                } else {
-                    a + listOf(c.first to c.first)
-                }
-            }
-        } + listOf(utext.length to utext.length)
+            utext
+                .mapIndexed { index, c -> index to c }
+                .filter { it.second !in FontData.lettersCodonTable.keys }
+                .fold(listOf()) { a, c ->
+                    if (a.isEmpty()) {
+                        listOf(c.first to c.first)
+                    } else {
+                        val last = a.last()
+                        if (c.first - 1 == last.second) {
+                            a.dropLast(1) + listOf(last.copy(second = c.first))
+                        } else {
+                            a + listOf(c.first to c.first)
+                        }
+                    }
+                } +
+            listOf(utext.length to utext.length)
     val goodRanges =
         badRanges
             .foldRight((0 to 0) to mutableListOf<Pair<Int, Int>>()) { t, r ->
@@ -66,25 +65,29 @@ private fun visualTransformAnnotate(colorScheme: ColorScheme, text: String) : An
             .second
     val ranges = (goodRanges + badRanges.dropLast(1).drop(1)).sortedBy { it.first }
 
-    return AnnotatedString.Builder("").apply {
-//        append(utext)
-        var isBad = badRanges.size >= 2 && badRanges[1].first == 0
-        ranges.forEach {
-            pushStyle(
-                SpanStyle(color = if (isBad) colorScheme.onError else colorScheme.onSurface)
-            )
-            append(utext.slice(IntRange(it.first, it.second)))
-            pop()
-            isBad = !isBad
+    return AnnotatedString.Builder("")
+        .apply {
+            //        append(utext)
+            var isBad = badRanges.size >= 2 && badRanges[1].first == 0
+            ranges.forEach {
+                pushStyle(
+                    SpanStyle(color = if (isBad) colorScheme.onError else colorScheme.onSurface)
+                )
+                append(utext.slice(IntRange(it.first, it.second)))
+                pop()
+                isBad = !isBad
+            }
         }
-    }.toAnnotatedString()
+        .toAnnotatedString()
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun TrollTextField(colorScheme: ColorScheme,
-                   data: TrollTextFieldData,
-                   onValueChanged: suspend (CoroutineScope) -> Unit) {
+fun TrollTextField(
+    colorScheme: ColorScheme,
+    data: TrollTextFieldData,
+    onValueChanged: suspend (CoroutineScope) -> Unit
+) {
     val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf(TextFieldValue("")) }
     val isAllowedChar = { c: Char -> c.isWhitespace() || c in FontData.lettersCodonTable.keys }
@@ -120,31 +123,38 @@ fun TrollTextField(colorScheme: ColorScheme,
             TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = colorScheme.onSurface,
                 errorIndicatorColor = colorScheme.onSurface,
-
                 focusedLabelColor = colorScheme.outline,
                 unfocusedLabelColor = colorScheme.outline,
                 disabledLabelColor = colorScheme.outline,
                 errorLabelColor = colorScheme.onError,
                 cursorColor = colorScheme.outline,
                 errorCursorColor = colorScheme.onError,
-
                 placeholderColor = colorScheme.outline,
                 disabledPlaceholderColor = colorScheme.outline,
             ),
         shape = RoundedCornerShape(20),
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Go,
-        ),
-        keyboardActions = KeyboardActions(
-            onGo = {
-                val selection = TextRange(text.text.length+1)
-                text = text.copy(text = text.text.insert(text.selection.start, '\n'),
-                    selection = selection)
-                data.text.value = text.text.uppercase()
-            }
-        ),
-        textStyle = TextStyle(
-            fontWeight = FontWeight.Bold, fontSize = 30.sp, color = colorScheme.onSurface),
+        keyboardOptions =
+            KeyboardOptions(
+                imeAction = ImeAction.Go,
+            ),
+        keyboardActions =
+            KeyboardActions(
+                onGo = {
+                    val selection = TextRange(text.text.length + 1)
+                    text =
+                        text.copy(
+                            text = text.text.insert(text.selection.start, '\n'),
+                            selection = selection
+                        )
+                    data.text.value = text.text.uppercase()
+                }
+            ),
+        textStyle =
+            TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                color = colorScheme.onSurface
+            ),
     )
 }
 

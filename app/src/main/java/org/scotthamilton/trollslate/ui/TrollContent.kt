@@ -89,9 +89,7 @@ private fun TrollShareFab(
         Icon(
             imageVector = Icons.Sharp.Share,
             "",
-            modifier =
-                Modifier.fillMaxSize(0.5f)
-                    .background(Color.Transparent),
+            modifier = Modifier.fillMaxSize(0.5f).background(Color.Transparent),
             tint = md_theme_light_secondary
         )
     }
@@ -115,10 +113,12 @@ private fun letterSizeToStokeWidth(letterSize: Size): Float = letterSize.width *
 @RequiresApi(Build.VERSION_CODES.N)
 @Preview(showBackground = true)
 @Composable
-fun TrollContent(text: String = "DORIAN",
-                 angle: Float = 5f,
-                 activity: Activity? = null,
-                 colorScheme: ColorScheme = MaterialTheme.colorScheme) {
+fun TrollContent(
+    text: String = "DORIAN",
+    angle: Float = 5f,
+    activity: Activity? = null,
+    colorScheme: ColorScheme = MaterialTheme.colorScheme
+) {
     val letterSize = angleToLetterSize(angle)
     val strokeWidth = letterSizeToStokeWidth(letterSize)
     TrollslateTheme {

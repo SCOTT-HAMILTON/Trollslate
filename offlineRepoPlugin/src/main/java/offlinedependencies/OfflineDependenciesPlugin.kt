@@ -18,16 +18,16 @@ class OfflineDependenciesPlugin : Plugin<Project> {
     }
     override fun apply(target: Project) {
         val offlineRepoRootDir = getOfflineRepoDir(target)
-        val repoHandler: RepositoryHandler = DefaultRepositoryHandler(
-            target.serviceOf(),
-            target.serviceOf(),
-            target.serviceOf()
+        val repoHandler: RepositoryHandler =
+            DefaultRepositoryHandler(target.serviceOf(), target.serviceOf(), target.serviceOf())
+        target.extensions.create(
+            EXTENSION_NAME,
+            OfflineDependenciesExtension::class.java,
+            repoHandler
         )
-        target.extensions.create(EXTENSION_NAME, OfflineDependenciesExtension::class.java, repoHandler)
         target.logger.info("Offline dependencies root configured at $offlineRepoRootDir")
         target.tasks.create(TASK_NAME, UpdateOfflineRepositoryTask::class.java)
     }
-
 }
 
 fun getOfflineRepoDir(target: Project): String {

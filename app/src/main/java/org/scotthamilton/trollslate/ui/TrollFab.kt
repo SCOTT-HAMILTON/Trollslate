@@ -59,9 +59,7 @@ fun TrollFab(
             Icon(
                 imageVector = Icons.Sharp.Check,
                 "",
-                modifier =
-                    Modifier.fillMaxSize(0.5f)
-                        .background(Color.Transparent),
+                modifier = Modifier.fillMaxSize(0.5f).background(Color.Transparent),
                 tint = colorScheme.onSecondaryContainer
             )
         }

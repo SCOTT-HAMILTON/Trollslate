@@ -123,9 +123,7 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData, colorScheme: ColorScheme) {
                         }
                     }
                 },
-                onLongClick = {
-                    menuExpanded = true
-                },
+                onLongClick = { menuExpanded = true },
                 colorScheme = colorScheme
             ) {
                 Icon(

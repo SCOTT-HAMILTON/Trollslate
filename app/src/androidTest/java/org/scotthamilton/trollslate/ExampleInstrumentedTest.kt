@@ -61,8 +61,7 @@ class ExampleInstrumentedTest {
         composeTestRule.setContent {
             TrollslateTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    TrollContent("HELLO WORLD" * 5, 10f,
-                        colorScheme = trollslateColorScheme())
+                    TrollContent("HELLO WORLD" * 5, 10f, colorScheme = trollslateColorScheme())
                 }
             }
         }

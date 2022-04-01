@@ -30,9 +30,7 @@ fun MainActivityContent(
     activity: Activity? = null
 ) {
     TrollslateTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize().background(colorScheme.background)
-        ) {
+        Surface(modifier = Modifier.fillMaxSize().background(colorScheme.background)) {
             Box(modifier = Modifier.fillMaxSize()) {
                 val creditState = remember {
                     MutableTransitionState(true).apply { targetState = true }
@@ -43,8 +41,8 @@ fun MainActivityContent(
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxHeight().align(Alignment.Center)
-                        .padding(bottom = 20.dp)
+                    modifier =
+                        Modifier.fillMaxHeight().align(Alignment.Center).padding(bottom = 20.dp)
                 ) {
                     Spacer(modifier = Modifier.fillMaxWidth().height(25.dp))
                     LettersSlide(colorScheme)

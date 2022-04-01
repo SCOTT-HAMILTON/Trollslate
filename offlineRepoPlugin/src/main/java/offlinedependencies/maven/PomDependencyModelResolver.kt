@@ -1,8 +1,10 @@
 package offlinedependencies.maven
 
+import java.io.File
 import org.apache.maven.model.Dependency
 import org.apache.maven.model.Parent
 import org.apache.maven.model.Repository
+import org.apache.maven.model.building.FileModelSource
 import org.apache.maven.model.building.ModelSource2
 import org.apache.maven.model.resolution.ModelResolver
 import org.gradle.api.Project
@@ -13,10 +15,8 @@ import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.internal.component.external.model.DefaultModuleComponentIdentifier
 import org.gradle.maven.MavenModule
 import org.gradle.maven.MavenPomArtifact
-import org.apache.maven.model.building.FileModelSource
-import java.io.File
 
-class PomDependencyModelResolver(private val project: Project) : ModelResolver  {
+class PomDependencyModelResolver(private val project: Project) : ModelResolver {
     private val pomCache: MutableMap<String, FileModelSource> = mutableMapOf()
     val componentCache: MutableMap<ModuleComponentIdentifier, File> = mutableMapOf()
     override fun resolveModel(
@@ -42,17 +42,18 @@ class PomDependencyModelResolver(private val project: Project) : ModelResolver  
         version: String,
         id: String
     ): ModelSource2? {
-        val mavenArtifacts = project.dependencies.createArtifactResolutionQuery()
-            .forComponents(
-                DefaultModuleComponentIdentifier.newId(
-                    DefaultModuleIdentifier.newId(
-                        groupId,
-                        artifactId
-                    ), version
+        val mavenArtifacts =
+            project
+                .dependencies
+                .createArtifactResolutionQuery()
+                .forComponents(
+                    DefaultModuleComponentIdentifier.newId(
+                        DefaultModuleIdentifier.newId(groupId, artifactId),
+                        version
+                    )
                 )
-            )
-            .withArtifacts(MavenModule::class.java, MavenPomArtifact::class.java)
-            .execute()
+                .withArtifacts(MavenModule::class.java, MavenPomArtifact::class.java)
+                .execute()
         val component = mavenArtifacts.resolvedComponents.first()
         val poms = component.getArtifacts(MavenPomArtifact::class.java)
         return if (poms.isEmpty()) {
@@ -69,13 +70,11 @@ class PomDependencyModelResolver(private val project: Project) : ModelResolver  
                 }
                 is ResolvedArtifactResult -> {
                     val pomFile = pomArtifact.file
-                    val componentId = DefaultModuleComponentIdentifier.newId(
-                        DefaultModuleIdentifier.newId(
-                            groupId,
-                            artifactId
-                        ),
-                        version
-                    )
+                    val componentId =
+                        DefaultModuleComponentIdentifier.newId(
+                            DefaultModuleIdentifier.newId(groupId, artifactId),
+                            version
+                        )
                     componentCache[componentId] = pomFile
                     val pom = FileModelSource(pomFile)
 
@@ -96,15 +95,16 @@ class PomDependencyModelResolver(private val project: Project) : ModelResolver  
         resolveModel(dependency?.groupId, dependency?.artifactId, dependency?.version)
 
     override fun addRepository(repository: Repository?) {
-//        repository?.let { repo ->
-//            project.logger.info("[PomDepModelResolver] asked to add repo $repo")
-//        }
+        //        repository?.let { repo ->
+        //            project.logger.info("[PomDepModelResolver] asked to add repo $repo")
+        //        }
     }
 
     override fun addRepository(repository: Repository?, replace: Boolean) {
-//        repository?.let { repo ->
-//            project.logger.info("[PomDepModelResolver] asked, with replace=$replace to add repo $repo")
-//        }
+        //        repository?.let { repo ->
+        //            project.logger.info("[PomDepModelResolver] asked, with replace=$replace to add
+        // repo $repo")
+        //        }
     }
 
     override fun newCopy(): ModelResolver {

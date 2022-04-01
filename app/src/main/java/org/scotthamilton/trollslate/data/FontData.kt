@@ -64,7 +64,6 @@ class FontData {
                 'X' to "LSAJRHJLHJASRD",
                 'Y' to "RHJLH",
                 'Z' to "RAHL",
-
                 '1' to "AHKBL",
                 '2' to "RLIRHL",
                 '3' to "LRILRHL",
@@ -75,7 +74,6 @@ class FontData {
                 '8' to "LRHLIRLD",
                 '9' to "RHLTR",
                 '0' to "LRHLD(_TA)U",
-
                 '?' to "WV(_TA)JRHLB",
                 '!' to "WV(_TA)H",
                 '-' to "(IL)R",

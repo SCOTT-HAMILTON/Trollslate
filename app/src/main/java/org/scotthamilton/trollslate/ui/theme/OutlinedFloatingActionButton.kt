@@ -30,32 +30,34 @@ fun OutlinedFloatingActionButton(
     content: @Composable () -> Unit,
 ) {
     Surface(
-        modifier = modifier
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                role = Role.Button,
-                onClick = onClick
-            )
-            .border(BorderStroke(2.dp, color), shape = shape)
-            .background(Color.Transparent),
+        modifier =
+            modifier
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    role = Role.Button,
+                    onClick = onClick
+                )
+                .border(BorderStroke(2.dp, color), shape = shape)
+                .background(Color.Transparent),
         interactionSource = interactionSource,
         shape = shape,
         color = Color.Transparent,
         contentColor = Color.Transparent,
         tonalElevation = elevation.tonalElevation(interactionSource = interactionSource).value,
         // no shadow elevation otherwise the content is not transparent
-    ) {
+        ) {
         CompositionLocalProvider(LocalContentColor provides Color.Transparent) {
             ProvideTextStyle(
                 MaterialTheme.typography.labelLarge,
             ) {
                 Box(
-                    modifier = Modifier
-                        .defaultMinSize(
-                            minWidth = 56.dp,
-                            minHeight = 56.dp,
-                        ).background(Color.Transparent),
+                    modifier =
+                        Modifier.defaultMinSize(
+                                minWidth = 56.dp,
+                                minHeight = 56.dp,
+                            )
+                            .background(Color.Transparent),
                     contentAlignment = Alignment.Center,
                 ) { content() }
             }

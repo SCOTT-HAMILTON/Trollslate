@@ -21,9 +21,11 @@ import org.scotthamilton.trollslate.utils.rotationVectorToRollAngle
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainActivityScaffold(navController: NavController?,
-                         activity: Activity?,
-                         colorScheme: ColorScheme) {
+fun MainActivityScaffold(
+    navController: NavController?,
+    activity: Activity?,
+    colorScheme: ColorScheme
+) {
     val sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
     val rotationSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
     val snackBarHostState = remember { SnackbarHostState() }

@@ -86,9 +86,6 @@ fun trollslateColorScheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
         darkTheme -> {
-            println("DarkColorScheme choosed: primary container = " +
-                    Integer.toHexString(DarkThemeColors.primaryContainer.toArgb())
-            )
             DarkThemeColors
         }
         else -> LightThemeColors

@@ -124,7 +124,6 @@ fun PhoneAngleSelector(data: PhoneAngleSelectorData, colorScheme: ColorScheme) {
                     }
                 },
                 onLongClick = {
-                    println("LOL Gyro Long Press")
                     menuExpanded = true
                 },
                 colorScheme = colorScheme

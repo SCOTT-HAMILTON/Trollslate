@@ -88,7 +88,6 @@ fun TrollTextField(colorScheme: ColorScheme,
     val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf(TextFieldValue("")) }
     val isAllowedChar = { c: Char -> c.isWhitespace() || c in FontData.lettersCodonTable.keys }
-    val keyboardController = LocalSoftwareKeyboardController.current
     OutlinedTextField(
         modifier = Modifier.width(300.dp).height(160.dp).testTag("trollTextField"),
         value = text,

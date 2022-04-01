@@ -39,7 +39,6 @@ private fun TrollShareFab(
     modifier: Modifier = Modifier,
     text: String,
     angle: Float,
-    colorScheme: ColorScheme
 ) {
     val letterSize = angleToLetterSize(angle)
     val strokeWidth = letterSizeToStokeWidth(letterSize)
@@ -154,8 +153,7 @@ fun TrollContent(text: String = "DORIAN",
                     modifier = Modifier.align(Alignment.TopEnd),
                     activity = activity,
                     text = text,
-                    angle = angle * 0.75f,
-                    colorScheme = colorScheme
+                    angle = angle * 0.75f
                 )
             }
         }

@@ -24,14 +24,14 @@ fun LettersSlide(colorScheme: ColorScheme) {
             Modifier.height(150.dp)
                 .width(300.dp)
                 .background(
-                    color = colorScheme.primaryContainer,
+                    color = colorScheme.secondaryContainer,
                     shape = RoundedCornerShape(20)
                 ),
         contentAlignment = Alignment.Center
     ) {
         LazyRow(
             modifier =
-                Modifier.background(colorScheme.primaryContainer)
+                Modifier.background(colorScheme.secondaryContainer)
                     .fillMaxSize(0.8f)
                     .padding(20.dp),
             horizontalArrangement = Arrangement.spacedBy(30.dp),
@@ -47,8 +47,8 @@ fun LettersSlide(colorScheme: ColorScheme) {
                             .fillParentMaxHeight()
                             .width(50.dp),
                     letter = letters.elementAt(index),
-                    backgroundColor = colorScheme.primaryContainer,
-                    textColor = colorScheme.onPrimaryContainer,
+                    backgroundColor = colorScheme.secondaryContainer,
+                    textColor = colorScheme.onSecondaryContainer,
                     angle = 30f,
                     adaptiveStrokes = true
                 )

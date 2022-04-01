@@ -2,14 +2,19 @@ package org.scotthamilton.trollslate.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
@@ -60,7 +65,6 @@ private fun visualTransformAnnotate(colorScheme: ColorScheme, text: String) : An
             }
             .second
     val ranges = (goodRanges + badRanges.dropLast(1).drop(1)).sortedBy { it.first }
-    println("Utext=`$utext`, error indices=$ranges")
 
     return AnnotatedString.Builder("").apply {
 //        append(utext)
@@ -76,6 +80,7 @@ private fun visualTransformAnnotate(colorScheme: ColorScheme, text: String) : An
     }.toAnnotatedString()
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TrollTextField(colorScheme: ColorScheme,
                    data: TrollTextFieldData,
@@ -83,6 +88,7 @@ fun TrollTextField(colorScheme: ColorScheme,
     val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf(TextFieldValue("")) }
     val isAllowedChar = { c: Char -> c.isWhitespace() || c in FontData.lettersCodonTable.keys }
+    val keyboardController = LocalSoftwareKeyboardController.current
     OutlinedTextField(
         modifier = Modifier.width(300.dp).height(160.dp).testTag("trollTextField"),
         value = text,
@@ -113,7 +119,6 @@ fun TrollTextField(colorScheme: ColorScheme,
         },
         colors =
             TextFieldDefaults.textFieldColors(
-//                backgroundColor = colorScheme.primary,
                 focusedIndicatorColor = colorScheme.onSurface,
                 errorIndicatorColor = colorScheme.onSurface,
 
@@ -128,7 +133,21 @@ fun TrollTextField(colorScheme: ColorScheme,
                 disabledPlaceholderColor = colorScheme.outline,
             ),
         shape = RoundedCornerShape(20),
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Go,
+        ),
+        keyboardActions = KeyboardActions(
+            onGo = {
+                val selection = TextRange(text.text.length+1)
+                text = text.copy(text = text.text.insert(text.selection.start, '\n'),
+                    selection = selection)
+                data.text.value = text.text.uppercase()
+            }
+        ),
         textStyle = TextStyle(
-            fontWeight = FontWeight.Bold, fontSize = 30.sp, color = colorScheme.onSurface)
+            fontWeight = FontWeight.Bold, fontSize = 30.sp, color = colorScheme.onSurface),
     )
 }
+
+private fun String.insert(index: Int, c: Char): String =
+    StringBuilder(this).apply { insert(index, c) }.toString()

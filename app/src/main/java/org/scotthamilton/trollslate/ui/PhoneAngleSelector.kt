@@ -35,14 +35,15 @@ data class PhoneAngleSelectorData(
 fun defaultPhoneAngleSelectorData(
     activity: Activity? = null,
     gyroscopeMissing: MutableState<Boolean> = mutableStateOf(false),
-    snackBarHostState: SnackbarHostState = SnackbarHostState()
+    snackBarHostState: SnackbarHostState = SnackbarHostState(),
+    phone3DLetter: Char = 'A'
 ): PhoneAngleSelectorData =
     PhoneAngleSelectorData(
         angleRange = IntRange(5, 80),
         currentAngle = mutableStateOf(80f),
         useGyroscope = mutableStateOf(false),
         gyroscopeMissing = gyroscopeMissing,
-        phone3DLetter = mutableStateOf('A'),
+        phone3DLetter = mutableStateOf(phone3DLetter),
         snackBarHostState = snackBarHostState,
         activity = activity
     )

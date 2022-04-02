@@ -39,7 +39,9 @@ fun TrollFab(
             )
     ) {
         OutlinedFloatingActionButton(
-            color = colorScheme.onSurface,
+            color =
+                if (trollTextFieldData.showError.value) colorScheme.error
+                else colorScheme.onSurface,
             onClick = {
                 if (!trollTextFieldData.showError.value) {
                     val text = trollTextFieldData.text.value.toUrlBase64()
@@ -60,7 +62,9 @@ fun TrollFab(
                 imageVector = Icons.Sharp.Check,
                 "",
                 modifier = Modifier.fillMaxSize(0.5f).background(Color.Transparent),
-                tint = colorScheme.onSecondaryContainer
+                tint =
+                    if (trollTextFieldData.showError.value) colorScheme.error
+                    else colorScheme.onSurface
             )
         }
     }

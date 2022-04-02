@@ -6,6 +6,7 @@ use_tests_in_packages(['org.scotthamilton.trollslate'])
 app_apk_path('app/build/outputs/apk/debug/app-debug.apk')
 tests_apk_path('app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk')
 
+# locales(['en'])
 locales(['en-US', 'fr-FR', 'de-DE'])
 
 # clear all previously generated screenshots in your local output directory before creating new ones

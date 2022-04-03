@@ -17,7 +17,7 @@ Some screens work better than others but it should work fine on yours regardless
      height="80">](https://f-droid.org/packages/org.scotthamilton.trollslate/)
 
 ## Screens
-![Demo](https://user-images.githubusercontent.com/24496705/155399458-58716f80-02a0-431c-9125-8aca085e0d35.gif)
+![Demo](https://github.com/SCOTT-HAMILTON/Trollslate/raw/master/demos/combined-demo.gif)
 
 ## Dependencies
  - Jetpack Compose

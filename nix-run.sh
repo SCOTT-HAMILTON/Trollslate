@@ -9,7 +9,7 @@ export ANDROID_HOME=~/Android/Sdk/
 # /home/scott/.cache/fdroidserver/gradle/7.3.3/bin/gradle app:dependencies
 # ./gradlew app:dependencies --scan
 # ./gradlew wrapper --gradle-version 7.4
-./gradlew app:assembleDebug app:assembleAndroidTest
+# ./gradlew app:assembleDebug app:assembleAndroidTest
 # ./gradlew app:assembleDebug --stacktrace
 # ./gradlew updateOfflineRepositoryTask --info
 # ./gradlew --scan -q app:dependencies 
@@ -18,5 +18,5 @@ export ANDROID_HOME=~/Android/Sdk/
 # ./gradlew --offline :classpath
 # ./gradlew :offlineRepoPlugin:pluginDescriptors --scan
 # ./gradlew app:assembleDebug
-# ./gradlew clean
+./gradlew :commonPlugin:clean
 # ~/GIT/NixPkgs/result/bin/fastlane screengrab

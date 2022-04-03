@@ -1,7 +1,7 @@
 object Config {
-    const val minSdkVersion = 23
+    const val minSdkVersion = 21
     const val compileSdkVersion = 31
     const val targetSdkVersion = 31
-    const val version = 27022022
-    const val versionName = "Delacroix"
+    const val version = 3042022
+    const val versionName = "Botticelli"
 }

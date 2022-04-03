@@ -6,7 +6,6 @@ import android.graphics.Bitmap.CompressFormat
 import android.os.Build.VERSION
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.*
@@ -14,9 +13,12 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import org.junit.After
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.*
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,12 +30,6 @@ import org.scotthamilton.trollslate.ui.theme.trollslateColorScheme
 import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.locale.LocaleTestRule
-import tools.fastlane.screengrab.locale.LocaleUtil
-import java.io.BufferedOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.util.*
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -44,8 +40,7 @@ import java.util.*
 class ExampleInstrumentedTest {
     @get:Rule val composeTestRule = createComposeRule()
 
-    @Rule @JvmField
-    val localeTestRule = LocaleTestRule()
+    @Rule @JvmField val localeTestRule = LocaleTestRule()
 
     @Test
     fun useAppContext() {
@@ -58,11 +53,13 @@ class ExampleInstrumentedTest {
     @Test
     fun mainActivityScreenshots() {
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
-        composeTestRule.setContent { TrollslateTheme { MainActivityContent(
-            phoneAngleSelectorData = defaultPhoneAngleSelectorData(
-                phone3DLetter = 'T'
-            )
-        ) } }
+        composeTestRule.setContent {
+            TrollslateTheme {
+                MainActivityContent(
+                    phoneAngleSelectorData = defaultPhoneAngleSelectorData(phone3DLetter = 'T')
+                )
+            }
+        }
         composeTestRule.onNodeWithTag("phoneAngleScroller").performGesture {
             swipeDown(startY = 0f, endY = 10000f)
         }
@@ -98,34 +95,30 @@ private fun Bitmap.saveScreengrab(name: String) {
         InstrumentationRegistry.getInstrumentation().targetContext.applicationContext,
         Screengrab.getLocale(),
         name,
-        this)
+        this
+    )
 }
 
 fun getScreenshotFile(screenshotDirectory: File?, screenshotName: String): File {
-    val screenshotFileName =
-        screenshotName + System.currentTimeMillis() + ".png"
+    val screenshotFileName = screenshotName + System.currentTimeMillis() + ".png"
     return File(screenshotDirectory, screenshotFileName)
 }
 
 @Throws(IOException::class)
 private fun getFilesDirectory(context: Context, locale: String): File {
     val base: File?
-    base = if (VERSION.SDK_INT > 29) {
-        context.getDir("screengrab", 0)
-    } else if (VERSION.SDK_INT < 24) {
-        context.getDir("screengrab", 1)
-    } else {
-        context.getExternalFilesDir("screengrab")
-    }
+    base =
+        if (VERSION.SDK_INT > 29) {
+            context.getDir("screengrab", 0)
+        } else if (VERSION.SDK_INT < 24) {
+            context.getDir("screengrab", 1)
+        } else {
+            context.getExternalFilesDir("screengrab")
+        }
     return if (base == null) {
         throw IOException("Unable to get a world-readable directory")
     } else {
-        val directory = initializeDirectory(
-            File(
-                File(base, locale),
-                "/images/screenshots"
-            )
-        )
+        val directory = initializeDirectory(File(File(base, locale), "/images/screenshots"))
         if (directory == null) {
             throw IOException("Unable to get a screenshot storage directory")
         } else {
@@ -162,10 +155,14 @@ private fun dlog(tag: String, msg: String) {
     println("$tag: $msg")
 }
 
-fun screenshotCaptured(context: Context, locale: String, screenshotName: String, screenshot: Bitmap) {
+fun screenshotCaptured(
+    context: Context,
+    locale: String,
+    screenshotName: String,
+    screenshot: Bitmap
+) {
     try {
-        val screenshotDirectory =
-            getFilesDirectory(context, locale)
+        val screenshotDirectory = getFilesDirectory(context, locale)
         val screenshotFile: File = getScreenshotFile(screenshotDirectory, screenshotName)
         dlog("Screengrab", "screenshotFile=`$screenshotFile`")
         var fos: BufferedOutputStream? = null

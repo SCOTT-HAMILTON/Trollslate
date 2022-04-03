@@ -1,16 +1,9 @@
 pluginManagement {
     repositories {
-        maven{
-            url = uri("${rootProject.getProjectDir().path}/app/offline-repository")
-        }
-        maven{
-            url = uri("${rootProject.getProjectDir().path}/offline-repository")
-        }
         gradlePluginPortal()
         google()
         mavenCentral()
     }
-	includeBuild("offlineRepoPlugin")
 	includeBuild("commonPlugin")
 }
 plugins {
@@ -24,13 +17,3 @@ gradleEnterprise {
 }
 rootProject.name = "trollslate"
 include(':app')
-//dependencyResolutionManagement {
-//    repositories {
-//        maven{
-//            url = uri("${rootProject.getProjectDir().path}/app/offline-repository")
-//        }
-//        maven{
-//            url = uri("${rootProject.getProjectDir().path}/offline-repository")
-//        }
-//    }
-//}

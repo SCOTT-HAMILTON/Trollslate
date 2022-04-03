@@ -3,12 +3,5 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-        maven{
-            url = uri("./../app/offline-repository")
-		}
-        maven{
-            url = uri("./../offline-repository")
-        }
     }
-    includeBuild("../offlineRepoPlugin")
 }

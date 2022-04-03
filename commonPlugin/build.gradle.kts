@@ -2,7 +2,6 @@ plugins {
     id("java-gradle-plugin")
     `kotlin-dsl`
     //    id("org.jetbrains.kotlin.android") version "1.5.31"
-    id("offline-dependencies")
 }
 
 repositories {
